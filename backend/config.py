@@ -26,4 +26,17 @@ class Settings(BaseSettings):
     max_chat_messages_per_day: int = int(os.getenv("MAX_CHAT_MESSAGES_PER_DAY", 40))
     max_research_queries_per_day: int = int(os.getenv("MAX_RESEARCH_QUERIES_PER_DAY", 8))
 
+    # CORS allowlist. The browser only ever talks to the Next.js origin
+    # (same-origin proxy architecture — see app/api/[...path]/route.ts), so
+    # this only matters as defense-in-depth against a browser hitting this
+    # backend directly. Comma-separated in production, e.g.
+    # "https://rinti-ai.vercel.app,https://your-custom-domain.com".
+    allowed_origins: str = os.getenv(
+        "ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000"
+    )
+
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+
 settings = Settings()

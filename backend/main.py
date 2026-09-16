@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import memory.database as db
 from api import auth as auth_api, chat, health, memory as memory_api, research, settings as settings_api
+from config import settings
 
 
 @asynccontextmanager
@@ -17,7 +18,7 @@ app = FastAPI(title="Rinti AI Companion Backend", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=settings.allowed_origins_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],

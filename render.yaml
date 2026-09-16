@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: rinti-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    plan: starter
+    disk:
+      name: rinti-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DB_PATH
+        value: /data/rinti_memory.db
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: MAX_CHAT_MESSAGES_PER_DAY
+        value: "40"
+      - key: MAX_RESEARCH_QUERIES_PER_DAY
+        value: "8"
