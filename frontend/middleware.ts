@@ -45,4 +45,10 @@ export const config = {
      */
     "/((?!api|_next|favicon.ico).*)",
   ],
+  // This middleware only reads a cookie name and issues a redirect — no Edge
+  // APIs needed — so it runs fine on the Node.js runtime. That's required
+  // here: this project's Vercel deployment builds frontend/ and backend/ as
+  // services in one project, and Vercel's services model doesn't support an
+  // Edge Function (the default runtime for middleware) alongside them.
+  runtime: "nodejs",
 };
