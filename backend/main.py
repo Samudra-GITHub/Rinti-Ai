@@ -11,7 +11,12 @@ from config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db.init_db()
+    try:
+        db.init_db()
+    except Exception as exc:
+        import sys
+        print(f"FATAL: database initialization failed during startup: {exc}", file=sys.stderr)
+        raise
     yield
     db_backend.close_pool()
 

@@ -33,13 +33,27 @@ _pool = None  # lazily-created psycopg2 connection pool, reused across warm serv
 def _get_pool():
     global _pool
     if _pool is None:
-        import psycopg2.pool
+        try:
+            import psycopg2.pool
+        except ImportError as exc:
+            raise RuntimeError(
+                f"psycopg2 is not installed or cannot be imported, but DATABASE_URL is set "
+                f"({settings.database_url[:20]}...). This usually means the requirements.txt "
+                f"dependency wasn't installed during the Vercel build. Error: {exc}"
+            ) from exc
 
-        _pool = psycopg2.pool.ThreadedConnectionPool(
-            minconn=1,
-            maxconn=5,
-            dsn=settings.database_url,
-        )
+        try:
+            _pool = psycopg2.pool.ThreadedConnectionPool(
+                minconn=1,
+                maxconn=5,
+                dsn=settings.database_url,
+            )
+        except Exception as exc:
+            raise RuntimeError(
+                f"Failed to create Postgres connection pool with DATABASE_URL. "
+                f"This usually means the connection string is invalid, or Postgres is unreachable. "
+                f"Error: {exc}"
+            ) from exc
     return _pool
 
 
