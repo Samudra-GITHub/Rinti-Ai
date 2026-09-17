@@ -35,6 +35,7 @@ class Settings(BaseSettings):
                 "production. Set DATABASE_URL to a Postgres connection string "
                 "(from Neon or another Marketplace provider)."
             )
+
     model_name: str = "openai/gpt-oss-120b"
     max_history_tokens: int = 2000
 
