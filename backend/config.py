@@ -19,6 +19,22 @@ class Settings(BaseSettings):
     # production database there. Left unset, local dev behaviour (SQLite at
     # db_path) is completely unchanged.
     database_url: str = os.getenv("DATABASE_URL", "")
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        # Catch configuration errors early. In production (Vercel), DATABASE_URL
+        # must be set — otherwise every request gets an ephemeral filesystem with
+        # no database, and all writes fail. Local dev with DATABASE_URL also unset
+        # is fine (uses SQLite). But if environment signals "production" with no
+        # DATABASE_URL, that's a config error that should fail loudly at startup,
+        # not silently with cryptic 500s on every request.
+        if self.environment == "production" and not self.database_url:
+            raise RuntimeError(
+                "FATAL: environment=production but DATABASE_URL is not set. "
+                "Vercel Functions have no durable filesystem — SQLite cannot be used for "
+                "production. Set DATABASE_URL to a Postgres connection string "
+                "(from Neon or another Marketplace provider)."
+            )
     model_name: str = "openai/gpt-oss-120b"
     max_history_tokens: int = 2000
 
