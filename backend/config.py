@@ -13,6 +13,12 @@ class Settings(BaseSettings):
     openai_base_url: str | None = os.getenv("OPENAI_BASE_URL", "https://api.groq.com/openai/v1")
     
     db_path: str = os.getenv("DB_PATH", "rinti_memory.db")
+    # Production persistence. When set, memory/db_backend.py routes every
+    # connection to Postgres instead of the local SQLite file — Vercel
+    # Functions have no durable local filesystem, so SQLite can't be the
+    # production database there. Left unset, local dev behaviour (SQLite at
+    # db_path) is completely unchanged.
+    database_url: str = os.getenv("DATABASE_URL", "")
     model_name: str = "openai/gpt-oss-120b"
     max_history_tokens: int = 2000
 

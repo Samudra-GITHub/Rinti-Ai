@@ -1,8 +1,8 @@
-import sqlite3
 import uuid
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from config import settings
+from memory import db_backend
 
 # Deterministic id for the account existing (pre-auth) local data is migrated
 # to. Fixed rather than randomly generated so re-running init_db() never
@@ -16,14 +16,11 @@ LEGACY_DATA_OWNER_NAME = "Rinti Dev"
 LEGACY_DATA_OWNER_PASSWORD = "rinti-dev-local-only"
 
 def get_connection():
-    conn = sqlite3.connect(settings.db_path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    return conn
+    return db_backend.get_connection()
 
-def _column_exists(cursor: sqlite3.Cursor, table: str, column: str) -> bool:
+def _column_exists(cursor, table: str, column: str) -> bool:
     cursor.execute(f"PRAGMA table_info({table})")
-    return any(row[1] == column for row in cursor.fetchall())
+    return any(row["name"] == column for row in cursor.fetchall())
 
 def init_db():
     """Initializes the SQLite schema for conversations, settings, and persistent memory.

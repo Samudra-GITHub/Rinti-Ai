@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import memory.database as db
+from memory import db_backend
 from api import auth as auth_api, chat, health, memory as memory_api, research, settings as settings_api
 from config import settings
 
@@ -12,6 +13,7 @@ from config import settings
 async def lifespan(app: FastAPI):
     db.init_db()
     yield
+    db_backend.close_pool()
 
 
 app = FastAPI(title="Rinti AI Companion Backend", lifespan=lifespan)
