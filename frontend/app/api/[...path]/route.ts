@@ -14,7 +14,12 @@
 // in a split frontend/backend dev setup.
 export const runtime = "nodejs";
 
-const BACKEND_URL = process.env.RINTI_BACKEND_URL ?? "http://127.0.0.1:8000";
+// RINTI_BACKEND_URL is injected by Vercel's service binding in production.
+// In production, Vercel services communicate via http://<service>.internal
+// Format. For dev, fallback to localhost. If binding isn't working,
+// this will try the Vercel internal format as a secondary fallback.
+const BACKEND_URL = process.env.RINTI_BACKEND_URL ||
+  (process.env.NODE_ENV === 'production' ? 'http://backend.internal' : 'http://127.0.0.1:8000');
 
 const HOP_BY_HOP_REQUEST_HEADERS = new Set(["host", "connection", "content-length"]);
 const HOP_BY_HOP_RESPONSE_HEADERS = new Set([

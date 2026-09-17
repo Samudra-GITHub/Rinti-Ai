@@ -3,7 +3,8 @@
 // this route only forwards bytes to the FastAPI backend and streams them back.
 export const runtime = "nodejs";
 
-const BACKEND_URL = process.env.RINTI_BACKEND_URL ?? "http://127.0.0.1:8000";
+const BACKEND_URL = process.env.RINTI_BACKEND_URL ||
+  (process.env.NODE_ENV === 'production' ? 'http://backend.internal' : 'http://127.0.0.1:8000');
 
 function sseError(code: string, message: string) {
   return new Response(`event: error\ndata: ${JSON.stringify({ code, message })}\n\n`, {

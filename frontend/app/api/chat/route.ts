@@ -3,7 +3,8 @@
 // any provider API key — that lives only in the backend's server-side config.
 export const runtime = "nodejs";
 
-const BACKEND_URL = process.env.RINTI_BACKEND_URL ?? "http://127.0.0.1:8000";
+const BACKEND_URL = process.env.RINTI_BACKEND_URL ||
+  (process.env.NODE_ENV === 'production' ? 'http://backend.internal' : 'http://127.0.0.1:8000');
 
 function sseError(code: string, message: string) {
   return new Response(
