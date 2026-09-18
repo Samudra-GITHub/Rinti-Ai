@@ -1,11 +1,11 @@
 {
   "services": {
     "frontend": {
-      "root": ".",
+      "root": "frontend/",
       "framework": "nextjs"
     },
     "backend": {
-      "root": "../backend/",
+      "root": "backend/",
       "entrypoint": "main:app",
       "functions": {
         "main.py": {
