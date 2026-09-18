@@ -1,11 +1,5 @@
 {
-  "buildCommand": "npm run build",
-  "installCommand": "npm ci && cd backend && pip install -r requirements.txt",
-  "framework": "nextjs",
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.12",
-      "maxDuration": 60
-    }
-  }
+  "buildCommand": "npm run build && cd backend && pip install -r requirements.txt",
+  "installCommand": "npm ci",
+  "framework": "nextjs"
 }
