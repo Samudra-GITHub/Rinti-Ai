@@ -1,13 +1,9 @@
 """Vercel Serverless Function entrypoint for Rinti backend.
 
 Mounts the FastAPI app so Vercel deploys it as a Function under /api/*.
-Lives at frontend/api/index.py because the Vercel project's Root Directory
-is frontend/ (frontend/package-lock.json is the only lock file in the
-repo, so Root Directory must stay frontend/ for npm ci to work) — Vercel
-only auto-detects Python Functions inside the Root Directory. The backend
-package itself was not moved; only this entrypoint's location changed, so
-the relative lookup below goes up two levels (out of frontend/api/, out
-of frontend/) to reach the sibling backend/ directory.
+Lives at the repo root because the Vercel project's Root Directory is
+confirmed to be `.` (repo root) — Vercel only auto-detects Python
+Functions inside the Root Directory.
 """
 
 import sys
@@ -15,9 +11,8 @@ import os
 
 try:
     # Add the backend directory to sys.path so imports work.
-    # __file__ is at <repo_root>/frontend/api/index.py, so backend/ is
-    # two levels up (out of api/, out of frontend/), then into backend/.
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'backend'))
+    # __file__ is at <repo_root>/api/index.py, so backend/ is one level up.
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
     # Import and check config first
     from config import settings
