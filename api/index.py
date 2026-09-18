@@ -12,15 +12,15 @@ try:
 
     # Import and check config first
     from config import settings
-    print(f"✓ Config loaded: environment={settings.environment}, db_url_set={bool(settings.database_url)}")
+    print(f"[OK] Config loaded: environment={settings.environment}, db_url_set={bool(settings.database_url)}")
 
     # Import the FastAPI app
     from main import app
-    print("✓ FastAPI app imported successfully")
+    print("[OK] FastAPI app imported successfully")
 
 except Exception as e:
     import traceback
-    print(f"✗ Failed to load app: {e}")
+    print(f"[ERROR] Failed to load app: {e}")
     traceback.print_exc()
     raise
 
