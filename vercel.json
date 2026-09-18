@@ -1,5 +1,5 @@
 {
-  "installCommand": "cd frontend && npm ci && cd ../backend && pip install -r requirements.txt",
+  "installCommand": "cd frontend && npm ci",
   "buildCommand": "cd frontend && npm run build",
   "framework": "nextjs"
 }
