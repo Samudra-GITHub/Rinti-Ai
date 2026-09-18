@@ -1,33 +1,11 @@
 {
-  "services": {
-    "frontend": {
-      "root": "frontend/",
-      "framework": "nextjs",
-      "bindings": [
-        {
-          "type": "service",
-          "service": "backend",
-          "format": "url",
-          "env": "RINTI_BACKEND_URL"
-        }
-      ]
-    },
-    "backend": {
-      "root": "backend/",
-      "entrypoint": "main:app",
-      "functions": {
-        "main.py": {
-          "maxDuration": 60
-        }
-      }
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci && cd backend && pip install -r requirements.txt",
+  "framework": "nextjs",
+  "functions": {
+    "api/index.py": {
+      "runtime": "python3.12",
+      "maxDuration": 60
     }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": {
-        "service": "frontend"
-      }
-    }
-  ]
+  }
 }
