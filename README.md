@@ -6,7 +6,7 @@ A conversational AI assistant with persistent memory, a multi-step research mode
 
 <br/>
 
-<img src="./assets/hero.png" width="100%" alt="Rinti AI hero" />
+<img src="./assets/hero-placeholder.svg" width="100%" alt="Rinti AI hero" />
 
 <br/>
 
