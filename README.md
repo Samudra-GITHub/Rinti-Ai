@@ -162,4 +162,4 @@ MIT — see [LICENSE](./LICENSE).
 
 <br/>
 
-<sub>Part of the Samudra OS product ecosystem. See the [profile](https://github.com/Samudra-GITHub) for the full lineup.</sub>
+<sub>Part of the Sams Studio product ecosystem. See the [profile](https://github.com/Samudra-GITHub) for the full lineup.</sub>
