@@ -35,3 +35,10 @@ frontend-vite-backup/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Added by repository cleanup
+CLAUDE.md
+AGENTS.md
+
+# Added by repository cleanup
+*.log
