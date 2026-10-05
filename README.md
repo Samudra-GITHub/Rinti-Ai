@@ -1,6 +1,22 @@
+<div align="center">
+
 # Rinti AI
 
-> A conversational AI workspace with per-user memory, a cited multi-step research mode and real account sessions, on FastAPI and Next.js.
+**A chat workspace with per-user memory, a cited research mode and real account sessions.**
+
+Streaming chat · memory · Tavily-backed research with sources · Argon2 auth with CSRF checks
+
+<br />
+
+**[Overview](#overview)** &nbsp;·&nbsp; **[Features](#features)** &nbsp;·&nbsp; **[Getting started](#getting-started)** &nbsp;·&nbsp; **[Architecture](#architecture)** &nbsp;·&nbsp; **[Structure](#project-structure)**
+
+<br />
+
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat-square&logo=nextdotjs&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?style=flat-square&logo=fastapi&logoColor=white) ![Tailwind](https://img.shields.io/badge/Tailwind-3-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white) ![Postgres_or_SQLite](https://img.shields.io/badge/Postgres_or_SQLite-storage-4169e1?style=flat-square&logo=postgresql&logoColor=white) ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+
+</div>
+
+---
 
 ## Overview
 
@@ -46,7 +62,6 @@ Rinti-Ai/
 │   ├── components/          # chat, research, memory, models, navigation, layout, orb
 │   ├── hooks/  providers/  lib/  ui/  styles/  middleware.ts
 ├── vercel.json              # Frontend and backend services, /api routing
-└── assets/                  # README placeholder graphics
 ```
 
 ## Getting Started
@@ -124,10 +139,6 @@ The speech code in `backend/voice/` and `backend/api/voice.py` exists, but the v
 ## Deployment
 
 `vercel.json` defines a `frontend` service (Next.js, `frontend/`) and a `backend` service (`main:app`, 60 s max duration) and routes `/api/*` to the backend. In production set `ENVIRONMENT=production` and `DATABASE_URL`, since Vercel Functions have no durable filesystem for SQLite. `backend/scripts/migrate_sqlite_to_postgres.py` migrates existing data.
-
-## Screenshots
-
-`assets/` holds placeholder graphics only, so no screenshots are shown.
 
 ## Future Improvements
 
