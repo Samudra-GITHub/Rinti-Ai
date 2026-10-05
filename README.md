@@ -1,165 +1,140 @@
 # Rinti AI
 
-**Your intelligent AI workspace.**
-
-A conversational AI assistant with persistent memory, a multi-step research mode, and account-based sessions — built on a FastAPI backend and a Next.js frontend.
-
-<br/>
-
-<img src="./assets/hero-placeholder.svg" width="100%" alt="Rinti AI hero" />
-
-<br/>
+> A conversational AI workspace with per-user memory, a cited multi-step research mode and real account sessions, on FastAPI and Next.js.
 
 ## Overview
 
-Rinti AI pairs a Groq/OpenAI-compatible chat backend with a research engine that plans searches, extracts sources, and synthesizes findings rather than just forwarding a prompt. Sessions are backed by real accounts — password auth with hashed credentials, HttpOnly session cookies, and CSRF protection — not a stub login screen.
-
-<br/>
+Rinti AI pairs an OpenAI-compatible chat backend (Groq by default) with a research engine that plans sub-queries, searches, extracts sources and synthesises a cited answer instead of forwarding a prompt. Sessions use real accounts: Argon2-hashed passwords, HttpOnly session cookies and a CSRF header check on every state-changing route. Usage is capped per user per day, because the model and search keys are shared server-side.
 
 ## Features
 
-| Feature | Description |
-|:--|:--|
-| Chat | Streaming conversational responses over a Groq/OpenAI-compatible endpoint |
-| Memory | Persistent, per-user conversation memory (`memory/` module, SQLite or Postgres) |
-| Research mode | Multi-step research engine — query planning, budgeted search, source extraction, and synthesis (`research/`) |
-| Authentication | Registration, login, logout, and session restoration via HttpOnly cookies + CSRF headers |
-| Voice | Dedicated voice API surface (`api/voice.py`) |
-| Settings | Per-user configurable settings |
-
-<br/>
-
-## Architecture
-
-```
-┌─────────────────┐       HTTPS        ┌──────────────────────┐
-│  Next.js 15      │ ─────────────────▶ │  FastAPI backend      │
-│  (frontend/)      │ ◀───────────────── │  (backend/)            │
-└─────────────────┘     streaming        └───────────┬──────────┘
-                                                       │
-                          ┌────────────────────────────┼───────────────────────────┐
-                          ▼                            ▼                           ▼
-                 ┌────────────────┐          ┌──────────────────┐        ┌──────────────────┐
-                 │ Groq / OpenAI-   │          │ Tavily search API  │        │ SQLite (dev) or   │
-                 │ compatible LLM   │          │ (research mode)     │        │ Postgres (prod)    │
-                 └────────────────┘          └──────────────────┘        └──────────────────┘
-```
-
-<br/>
-
-## Providers
-
-- **LLM** — any OpenAI-compatible endpoint; defaults to Groq (`OPENAI_BASE_URL`)
-- **Search** — [Tavily](https://tavily.com) for research-mode source discovery
-- **Persistence** — SQLite locally, Postgres in production (`DATABASE_URL`)
-
-<br/>
-
-## API Endpoints
-
-| Route | Purpose |
-|:--|:--|
-| `POST /api/auth/*` | Register, login, logout, session restore |
-| `POST /api/chat` | Streaming chat completions |
-| `GET/POST /api/memory` | Read and write conversation memory |
-| `POST /api/research` | Run a research-mode query |
-| `GET/POST /api/settings` | Per-user settings |
-| `POST /api/voice` | Voice interaction endpoint |
-| `GET /api/health` | Health check |
-
-<br/>
-
-## Folder Structure
-
-```
-rinti-ai/
-├── backend/
-│   ├── api/            # auth, chat, health, memory, research, settings, voice
-│   ├── auth/           # session + CSRF dependencies
-│   ├── core/
-│   ├── memory/         # SQLite/Postgres-backed conversation memory
-│   ├── research/       # planner, engine, extractors, providers (Tavily), synthesis
-│   ├── voice/
-│   ├── config.py        # Settings (env-driven)
-│   └── main.py
-└── frontend/
-    ├── app/
-    │   ├── (app)/       # authenticated app routes
-    │   └── (auth)/      # login / register routes
-    ├── components/
-    ├── hooks/
-    ├── lib/
-    └── providers/
-```
-
-<br/>
+- **Streaming chat** with saved conversations, backed by an OpenAI-compatible endpoint
+- **Memory**: per-user memory items you can list, add and delete
+- **Research mode** (Quick and Standard budgets): intent detection, query planning, Tavily search, page extraction (trafilatura / BeautifulSoup), claim evaluation and synthesis, rendered with a sources panel and inline citations
+- **Authentication**: register, login, logout and session restore
+- **Model selection**: lists the models the backend reports as available
+- **Per-user daily limits** on chat messages and research queries
+- **Dark UI** with a gradient background, an orb, and Lenis smooth scrolling
 
 ## Tech Stack
 
-**Backend** — `FastAPI` · `Pydantic` · `psycopg2` (Postgres) · `argon2-cffi` (password hashing) · `trafilatura` + `BeautifulSoup` (extraction)
-**Frontend** — `Next.js 15` · `React 19` · `TypeScript` · `Tailwind CSS` · `Framer Motion` · `Lenis`
+| Layer | Technology |
+| --- | --- |
+| Backend | FastAPI, Uvicorn, Pydantic / pydantic-settings, `openai` client, Argon2 (`argon2-cffi`), trafilatura, BeautifulSoup |
+| Storage | SQLite locally, Postgres in production (`psycopg2`) |
+| Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS 3, Framer Motion, Lenis |
+| Services | Groq or any OpenAI-compatible LLM, Tavily search |
 
-<br/>
+## Project Structure
 
-## Setup
+```
+Rinti-Ai/
+├── backend/
+│   ├── main.py              # FastAPI app, CORS, router registration
+│   ├── config.py            # Environment-driven settings
+│   ├── api/                 # auth, chat, memory, research, settings, health, voice
+│   ├── auth/                # Password hashing, session and CSRF dependencies
+│   ├── core/                # Chat "brain" and personality
+│   ├── memory/              # SQLite/Postgres persistence layer
+│   ├── research/            # intent, planner, engine, evaluator, claims, synthesis,
+│   │                        #   providers/ (Tavily), extractors/
+│   ├── voice/               # Speech-to-text and text-to-speech helpers
+│   ├── scripts/             # migrate_sqlite_to_postgres.py
+│   └── requirements.txt
+├── frontend/
+│   ├── app/                 # (app)/ chat, memory, models, settings; (auth)/ login, register
+│   ├── components/          # chat, research, memory, models, navigation, layout, orb
+│   ├── hooks/  providers/  lib/  ui/  styles/  middleware.ts
+├── vercel.json              # Frontend and backend services, /api routing
+└── assets/                  # README placeholder graphics
+```
 
-**Backend**
+## Getting Started
+
+**Prerequisites:** Python 3, Node.js and npm, an OpenAI-compatible API key (Groq works) and, for research mode, a Tavily key.
+
+### Backend
 
 ```bash
 cd backend
+python -m venv .venv
+.venv\Scripts\activate           # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+# create backend/.env (see Configuration)
+uvicorn main:app --reload        # http://localhost:8000
 ```
 
-**Frontend**
+### Frontend
 
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run dev                      # http://localhost:3000
 ```
 
-<br/>
+> The frontend calls same-origin `/api/*`. On Vercel, `vercel.json` routes that path to the backend service. This repository has no local Next.js proxy, so for local full-stack use you need `/api/*` on port 3000 routed to the backend on port 8000 (for example with the Vercel CLI).
 
-## Environment Variables
+## Configuration
 
-**Backend** (`backend/.env`)
+Backend variables, read from `backend/.env`:
 
-```bash
-OPENAI_API_KEY=          # your Groq or OpenAI-compatible API key
-OPENAI_BASE_URL=https://api.groq.com/openai/v1
-TAVILY_API_KEY=          # required for research mode
-HOST=0.0.0.0
-PORT=8000
-ENVIRONMENT=development  # set to "production" to require DATABASE_URL
-DB_PATH=rinti_memory.db  # used when DATABASE_URL is unset (local SQLite)
-DATABASE_URL=            # Postgres connection string, required in production
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | Groq or OpenAI-compatible API key | none |
+| `OPENAI_BASE_URL` | LLM endpoint | `https://api.groq.com/openai/v1` |
+| `TAVILY_API_KEY` | Required for research mode | none |
+| `ENVIRONMENT` | `production` makes `DATABASE_URL` mandatory at startup | `development` |
+| `DATABASE_URL` | Postgres connection string | unset, so SQLite is used |
+| `DB_PATH` | SQLite file when `DATABASE_URL` is unset | `rinti_memory.db` |
+| `ALLOWED_ORIGINS` | Comma-separated CORS allowlist | `http://localhost:3000,http://127.0.0.1:3000` |
+| `MAX_CHAT_MESSAGES_PER_DAY` | Per-user chat cap | `40` |
+| `MAX_RESEARCH_QUERIES_PER_DAY` | Per-user research cap | `8` |
+| `HOST`, `PORT` | Server bind | `0.0.0.0`, `8000` |
+
+Never commit `.env`.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    B[Browser] --> F[Next.js frontend]
+    F -->|/api/*| A[FastAPI backend]
+    A --> L[LLM<br/>Groq / OpenAI-compatible]
+    A --> T[Tavily search]
+    A --> D[(SQLite / Postgres)]
 ```
 
-<br/>
+The browser only talks to the Next.js origin. `middleware.ts` is a UX-only redirect based on the presence of a session cookie; the real check happens in the backend, where every protected route validates the session and state-changing routes require the `X-Rinti-Client` header as CSRF mitigation. Research runs as a pipeline (intent, plan, search, extract, evaluate, synthesise) with a budget per mode defined in `backend/research/config.py`.
+
+### API
+
+All routes are under `/api`.
+
+| Area | Routes |
+| --- | --- |
+| Auth | `POST /auth/register`, `/auth/login`, `/auth/logout`; `GET /auth/me` |
+| Chat | `POST /chat`, `POST /chat/stream`; `GET /conversations`, `GET`/`DELETE /conversations/{id}`; `GET /usage` |
+| Memory | `GET`/`POST /memory`, `DELETE /memory/{id}` |
+| Research | `GET /research/status`, `POST /research/intent`, `POST /research/stream` |
+| Settings | `GET /settings`, `/voices`, `/models` |
+| Health | `GET /health` |
+
+The speech code in `backend/voice/` and `backend/api/voice.py` exists, but the voice router is not registered in `main.py`, so the voice endpoints are currently not served. Text-to-speech is a stub that returns empty audio.
 
 ## Deployment
 
-Configured for Vercel (`vercel.json` at repo root). In production, `ENVIRONMENT=production` requires `DATABASE_URL` to be set — Vercel Functions have no durable local filesystem, so SQLite can't back production data there.
+`vercel.json` defines a `frontend` service (Next.js, `frontend/`) and a `backend` service (`main:app`, 60 s max duration) and routes `/api/*` to the backend. In production set `ENVIRONMENT=production` and `DATABASE_URL`, since Vercel Functions have no durable filesystem for SQLite. `backend/scripts/migrate_sqlite_to_postgres.py` migrates existing data.
 
-<br/>
+## Screenshots
 
-## Roadmap
+`assets/` holds placeholder graphics only, so no screenshots are shown.
 
-- [x] Chat with streaming responses
-- [x] Persistent memory
-- [x] Multi-step research mode
-- [x] Session-based authentication
-- [x] Voice API surface
-- [ ] Richer memory recall across long sessions
-- [ ] Expanded provider support beyond Groq/OpenAI
+## Future Improvements
 
-<br/>
+- Mount the voice router and implement real text-to-speech
+- Add a local development proxy for `/api/*`
+- Automated tests (none are included)
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
-
-<br/>
-
-<sub>Part of the Sams Studio product ecosystem. See the [profile](https://github.com/Samudra-GITHub) for the full lineup.</sub>
+MIT, see [LICENSE](LICENSE).
