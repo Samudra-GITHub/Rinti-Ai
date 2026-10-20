@@ -217,6 +217,25 @@ export function ChatWindow({
       const conversationIdHeader = res.headers.get("x-conversation-id");
       if (conversationIdHeader) activeConversationIdRef.current = conversationIdHeader;
 
+      if (!res.ok) {
+        // Non-2xx replies are JSON errors, not SSE — surface the backend's
+        // own message (rate limit, bad request, ...) instead of a generic one.
+        let detail: string | null = null;
+        try {
+          const body = await res.json();
+          if (typeof body?.detail === "string") detail = body.detail;
+        } catch {
+          // non-JSON body
+        }
+        setErrorMessage(
+          detail ??
+            (res.status >= 500
+              ? "Something went wrong on the server. Please try again."
+              : "Rinti couldn't process that request. Please try again.")
+        );
+        return;
+      }
+
       if (!res.body) throw new Error("empty_body");
 
       const reader = res.body.getReader();
