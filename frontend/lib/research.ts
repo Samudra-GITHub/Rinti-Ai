@@ -114,6 +114,7 @@ export interface ResearchDoneEvent {
 
 export async function fetchResearchStatus(): Promise<ResearchStatusDto> {
   const res = await fetch("/api/research/status", {
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
   });
   if (!res.ok) throw new Error("Could not check research availability");
@@ -134,6 +135,7 @@ export interface ResearchSessionDto {
 export async function fetchResearchSession(sessionId: string): Promise<ResearchSessionDto | null> {
   try {
     const res = await fetch(`/api/research/${sessionId}`, {
+      cache: "no-store",
       headers: { "Content-Type": "application/json" },
     });
     if (!res.ok) return null;

@@ -52,6 +52,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
     res = await fetch(path, {
+      cache: "no-store",
       ...init,
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +60,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
         ...init?.headers,
       },
     });
-  } catch {
+  } catch (err) {
+    console.error(`[API Network Error] ${method} ${path}:`, err);
     throw new ApiError(0, "Can't reach Rinti's backend. Is it running?");
   }
 
@@ -68,19 +70,27 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   if (!res.ok) {
-    // 4xx details from this backend are short, curated, human-written strings
-    // ("Title cannot be empty", "Conversation not found") — safe to show as-is.
-    // 5xx bodies can carry a raw Python exception string (str(e)) which could
-    // include internal detail; never surface that to the browser.
-    if (res.status >= 500) {
-      throw new ApiError(res.status, "Something went wrong on the server. Please try again.");
-    }
-    let detail = res.statusText;
+    let detail = res.statusText || "Request failed";
     try {
       const body = await res.json();
       if (typeof body?.detail === "string") detail = body.detail;
+      else if (typeof body?.message === "string") detail = body.message;
     } catch {
-      // ignore non-JSON error bodies
+      try {
+        const text = await res.text();
+        if (text) detail = text.slice(0, 150);
+      } catch {
+        // ignore
+      }
+    }
+    console.error(`[API Error ${res.status}] ${method} ${path}:`, detail);
+
+    if (res.status >= 500) {
+      const isDev = process.env.NODE_ENV === "development";
+      throw new ApiError(
+        res.status,
+        isDev ? `Server error (${res.status}): ${detail}` : "Something went wrong on the server. Please try again."
+      );
     }
     throw new ApiError(res.status, detail);
   }
