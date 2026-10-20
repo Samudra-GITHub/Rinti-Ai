@@ -18,6 +18,11 @@ LEGACY_DATA_OWNER_PASSWORD = "rinti-dev-local-only"
 def get_connection():
     return db_backend.get_connection()
 
+def _first_value(row):
+    """First column of a row. sqlite3.Row supports row[0], but Postgres rows
+    come back as dicts (RealDictCursor), where row[0] raises KeyError."""
+    return next(iter(row.values())) if isinstance(row, dict) else row[0]
+
 def _column_exists(cursor, table: str, column: str) -> bool:
     cursor.execute(f"PRAGMA table_info({table})")
     return any(row["name"] == column for row in cursor.fetchall())
@@ -171,7 +176,7 @@ def init_db():
         "UNION ALL SELECT COUNT(*) FROM memories WHERE user_id IS NULL "
         "UNION ALL SELECT COUNT(*) FROM research_sessions WHERE user_id IS NULL"
     )
-    orphaned_counts = [row[0] for row in cursor.fetchall()]
+    orphaned_counts = [_first_value(row) for row in cursor.fetchall()]
     if any(orphaned_counts):
         cursor.execute("SELECT id FROM users WHERE id = ?", (LEGACY_DATA_OWNER_ID,))
         if not cursor.fetchone():
@@ -311,7 +316,7 @@ def check_and_increment_usage(user_id: str, kind: str, daily_limit: int) -> Dict
         f"SELECT {column} FROM usage_daily WHERE user_id = ? AND usage_date = ?",
         (user_id, today),
     )
-    used = cursor.fetchone()[0]
+    used = _first_value(cursor.fetchone())
 
     if used >= daily_limit:
         conn.commit()

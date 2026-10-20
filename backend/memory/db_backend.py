@@ -21,6 +21,7 @@ existed).
 
 import re
 import sqlite3
+from datetime import datetime
 from typing import Any, Optional, Sequence
 
 from config import settings
@@ -86,12 +87,14 @@ def _translate_sql(sql: str) -> Optional[str]:
         out = re.sub(r"(?i)\bINSERT\s+OR\s+IGNORE\s+INTO\b", "INSERT INTO", out)
         out = out.rstrip().rstrip(";") + " ON CONFLICT DO NOTHING"
 
-    if upper.startswith("CREATE TABLE"):
+    if upper.startswith(("CREATE TABLE", "ALTER TABLE")):
         # SQLite has no real boolean type (BOOLEAN columns already just hold
         # 0/1 integers under the hood) — mapping to INTEGER on the Postgres
         # side keeps every existing 0/1 read/write in the app code correct
         # without touching it, and avoids Postgres's strict int->bool cast
-        # rules on both DEFAULT clauses and bound parameters.
+        # rules on both DEFAULT clauses and bound parameters. ALTER TABLE ADD
+        # COLUMN needs the same mapping, or the column becomes a real boolean
+        # with an integer default and Postgres rejects it.
         out = re.sub(r"(?i)\bBOOLEAN\b", "INTEGER", out)
 
     # No SQL text in this codebase uses a literal `?` character as data (no
@@ -99,6 +102,17 @@ def _translate_sql(sql: str) -> Optional[str]:
     # query itself) — every `?` is a placeholder, so a blanket swap is safe.
     out = out.replace("?", "%s")
     return out
+
+
+def _normalize_row(row):
+    """Postgres returns TIMESTAMP columns as datetime objects; SQLite (and the
+    API's `str` response fields) expect "YYYY-MM-DD HH:MM:SS" strings."""
+    if row is None:
+        return None
+    for key, value in row.items():
+        if isinstance(value, datetime):
+            row[key] = value.strftime("%Y-%m-%d %H:%M:%S")
+    return row
 
 
 class _PGCursor:
@@ -116,10 +130,10 @@ class _PGCursor:
         return self
 
     def fetchone(self):
-        return self._cursor.fetchone()
+        return _normalize_row(self._cursor.fetchone())
 
     def fetchall(self):
-        return self._cursor.fetchall()
+        return [_normalize_row(row) for row in self._cursor.fetchall()]
 
     @property
     def rowcount(self) -> int:
