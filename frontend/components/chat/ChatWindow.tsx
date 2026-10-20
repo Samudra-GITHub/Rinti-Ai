@@ -204,7 +204,7 @@ export function ChatWindow({
             }),
             signal: controller.signal,
           })
-        : await fetch("/api/chat", {
+        : await fetch("/api/chat/stream", {
             method: "POST",
             headers: withCsrfHeader({ "Content-Type": "application/json" }),
             body: JSON.stringify({
