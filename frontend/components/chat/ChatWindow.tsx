@@ -243,7 +243,7 @@ export function ChatWindow({
       }
 
       const res = useResearch
-        ? await fetch("/api/research", {
+        ? await fetch("/api/research/stream", {
             method: "POST",
             headers: withCsrfHeader({ "Content-Type": "application/json" }),
             body: JSON.stringify({
