@@ -25,12 +25,12 @@ export function FactsSection({ section }: { section: AnswerSectionDto }) {
       )}
     >
       <div className="mb-2 flex items-center gap-2">
-        {section.title && <h3 className="text-sm font-medium text-white/90">{section.title}</h3>}
+        {section.title && <h3 className="text-sm font-medium text-fg/90">{section.title}</h3>}
         {section.status && <StatusBadge status={section.status} />}
       </div>
       <ul className="flex flex-col gap-1.5">
         {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-white/75">
+          <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-fg/75">
             <Check size={12} className={cn("mt-1 shrink-0", isUncertain ? "text-amber-300/60" : "text-cyan-300/70")} />
             <CitedText text={item} />
           </li>

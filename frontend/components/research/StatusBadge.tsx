@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
 const STATUS_STYLE: Record<FactStatus, { label: string; className: string; icon: typeof ShieldCheck }> = {
   OFFICIAL: { label: "Official", className: "border-purple-300/30 bg-purple-500/15 text-purple-200", icon: ShieldCheck },
   CONFIRMED: { label: "Confirmed", className: "border-cyan-300/30 bg-cyan-500/15 text-cyan-200", icon: CircleCheck },
-  REPORTED: { label: "Reported", className: "border-white/15 bg-white/5 text-white/65", icon: Newspaper },
+  REPORTED: { label: "Reported", className: "border-fg/15 bg-fg/5 text-fg/65", icon: Newspaper },
   RUMORED: { label: "Rumored", className: "border-amber-300/30 bg-amber-500/10 text-amber-200", icon: HelpCircle },
   SPECULATIVE: { label: "Speculative", className: "border-amber-300/20 bg-amber-500/5 text-amber-200/80", icon: Sparkles },
 };

@@ -1,68 +1,120 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight, Monitor, Moon, Sun } from "lucide-react";
+import { PageShell, SectionLabel } from "@/components/layout/PageShell";
 import { SettingsCard } from "@/components/settings/SettingsCard";
+import { Segmented } from "@/ui/Segmented";
 import { Switch } from "@/ui/Switch";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme, } from "@/hooks/useTheme";
+import { useActiveModel } from "@/hooks/useActiveModel";
+import { api } from "@/lib/api";
 
 export default function SettingsPage() {
-  const { theme, toggleTheme } = useTheme();
-  const [compact, setCompact] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [sidebarPinned, setSidebarPinned] = useState(true);
-  const [showTimestamps, setShowTimestamps] = useState(true);
+  const { theme, setTheme, reduceMotion, setReduceMotion, showTimestamps, setShowTimestamps } = useTheme();
+  const { activeModel } = useActiveModel();
+
+  // "Use memory" is stored by the backend and really changes Rinti's replies.
+  const [memoryEnabled, setMemoryEnabled] = useState<boolean | null>(null);
+  const [memoryError, setMemoryError] = useState<string | null>(null);
+  const [savingMemory, setSavingMemory] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .getSettings()
+      .then((s) => {
+        if (!cancelled) setMemoryEnabled(s.memory_enabled);
+      })
+      .catch((e) => {
+        if (!cancelled) setMemoryError(e instanceof Error ? e.message : "Couldn't load this setting.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleMemoryToggle(next: boolean) {
+    const previous = memoryEnabled;
+    setMemoryEnabled(next);
+    setSavingMemory(true);
+    setMemoryError(null);
+    try {
+      const saved = await api.updateSettings({ memory_enabled: next });
+      setMemoryEnabled(saved.memory_enabled);
+    } catch (e) {
+      setMemoryEnabled(previous);
+      setMemoryError(e instanceof Error ? e.message : "Couldn't save this setting. Try again.");
+    } finally {
+      setSavingMemory(false);
+    }
+  }
 
   return (
-    <div className="mx-auto max-w-2xl py-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white/95">Settings</h1>
-        <p className="mt-1 text-sm text-white/45">
-          Preferences are stored locally in this browser only.
+    <PageShell title="Settings" description="Appearance is saved in this browser. Memory is saved on the server.">
+      <SectionLabel>Appearance</SectionLabel>
+      <SettingsCard title="Theme" description="Follow your system, or always use light or dark.">
+        <Segmented
+          label="Theme"
+          value={theme}
+          onChange={setTheme}
+          options={[
+            { value: "system", label: "System", icon: <Monitor size={13} /> },
+            { value: "light", label: "Light", icon: <Sun size={13} /> },
+            { value: "dark", label: "Dark", icon: <Moon size={13} /> },
+          ]}
+        />
+      </SettingsCard>
+      <SettingsCard
+        title="Reduce motion"
+        description="Turn off the background animation and most transitions. Your system's reduced-motion setting is always respected."
+      >
+        <Switch checked={reduceMotion} onCheckedChange={setReduceMotion} label="Reduce motion" />
+      </SettingsCard>
+
+      <SectionLabel>Conversations</SectionLabel>
+      <SettingsCard title="Show message times" description="Display the time each message was sent.">
+        <Switch checked={showTimestamps} onCheckedChange={setShowTimestamps} label="Show message times" />
+      </SettingsCard>
+
+      <SectionLabel>Memory</SectionLabel>
+      <SettingsCard
+        title="Use memory in replies"
+        description="Let Rinti draw on the facts you've saved to personalise its answers."
+      >
+        {memoryEnabled === null && !memoryError ? (
+          <div className="h-6 w-11 animate-pulse rounded-full bg-fg/10" aria-label="Loading" />
+        ) : (
+          <Switch
+            checked={Boolean(memoryEnabled)}
+            onCheckedChange={handleMemoryToggle}
+            label="Use memory in replies"
+            disabled={memoryEnabled === null || savingMemory}
+          />
+        )}
+      </SettingsCard>
+      {memoryError && (
+        <p role="alert" className="px-1 pb-2 text-[13px] text-red-600 dark:text-red-300">
+          {memoryError}
         </p>
-      </div>
+      )}
+      <Link
+        href="/memory"
+        className="mt-1 inline-flex items-center gap-1 px-1 text-[13px] text-purple-300 hover:underline focus-ring"
+      >
+        Manage what Rinti remembers <ArrowUpRight size={13} />
+      </Link>
 
-      <div className="space-y-4">
-        <p className="px-1 text-[11px] font-medium uppercase tracking-wider text-white/35">
-          Appearance
-        </p>
-        <SettingsCard
-          title="Dim variant"
-          description="Switch between the deep-black theme and a softer, dimmer dark variant."
-        >
-          <Switch checked={theme === "dim"} onCheckedChange={toggleTheme} label="Toggle dim theme" />
-        </SettingsCard>
-
-        <SettingsCard
-          title="Reduce motion"
-          description="Minimize orb pulsing and transition animations across the app."
-        >
-          <Switch checked={reduceMotion} onCheckedChange={setReduceMotion} label="Toggle reduced motion" />
-        </SettingsCard>
-
-        <p className="px-1 pt-4 text-[11px] font-medium uppercase tracking-wider text-white/35">
-          Layout
-        </p>
-        <SettingsCard
-          title="Compact layout"
-          description="Tighten spacing across cards and lists for smaller displays."
-        >
-          <Switch checked={compact} onCheckedChange={setCompact} label="Toggle compact layout" />
-        </SettingsCard>
-
-        <SettingsCard
-          title="Keep sidebar pinned"
-          description="Always show the conversation sidebar on desktop, even after navigating."
-        >
-          <Switch checked={sidebarPinned} onCheckedChange={setSidebarPinned} label="Toggle sidebar pinned" />
-        </SettingsCard>
-
-        <SettingsCard
-          title="Show message timestamps"
-          description="Display the time each message was sent inside chat bubbles."
-        >
-          <Switch checked={showTimestamps} onCheckedChange={setShowTimestamps} label="Toggle timestamps" />
-        </SettingsCard>
-      </div>
-    </div>
+      <SectionLabel>Model</SectionLabel>
+      <SettingsCard
+        title="Active model"
+        description={activeModel ? `Rinti is using ${activeModel}.` : "No model is available right now."}
+      >
+        <Link href="/models" className="text-[13px] text-purple-300 hover:underline focus-ring">
+          Change
+        </Link>
+      </SettingsCard>
+    </PageShell>
   );
 }

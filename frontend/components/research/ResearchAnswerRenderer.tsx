@@ -58,12 +58,12 @@ export function ResearchAnswerRenderer({ answer }: { answer: ResearchAnswerDto }
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mx-auto flex w-full max-w-2xl flex-col gap-3"
+      className="flex w-full flex-col gap-4"
     >
       {hasHeader && (
-        <div className="glass-panel rounded-2xl px-5 py-4">
+        <div className="pb-1">
           {answer.title && (
-            <h2 className="flex items-center gap-2 text-base font-semibold text-white/95">
+            <h2 className="flex items-center gap-2 font-display text-xl font-medium leading-tight tracking-[-0.03em] text-fg">
               <Sparkles size={15} className="text-purple-300/80" />
               {answer.title}
             </h2>
@@ -71,17 +71,17 @@ export function ResearchAnswerRenderer({ answer }: { answer: ResearchAnswerDto }
           {answer.overview && (
             <CitedText
               text={answer.overview}
-              className="mt-2 block whitespace-pre-wrap text-[13.5px] leading-relaxed text-white/70"
+              className="mt-2 block whitespace-pre-wrap text-[13.5px] leading-relaxed text-fg/70"
             />
           )}
           {answer.executive_summary.length > 0 && (
-            <div className="mt-3 border-t border-white/8 pt-3">
-              <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-white/35">
+            <div className="mt-4 border-t border-fg/8 pt-4">
+              <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wider text-fg/35">
                 Executive Summary
               </p>
               <ul className="flex flex-col gap-1.5">
                 {answer.executive_summary.map((finding, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-white/75">
+                  <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-fg/75">
                     <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-300/70" />
                     <CitedText text={finding} />
                   </li>

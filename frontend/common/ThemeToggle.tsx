@@ -1,18 +1,21 @@
 "use client";
 
-import { Moon, MoonStar } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { IconButton } from "@/ui/IconButton";
 
+/** Quick light/dark switch. The full choice (including "system") lives in Settings. */
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const next = resolvedTheme === "dark" ? "light" : "dark";
 
   return (
     <IconButton
-      icon={theme === "dark" ? Moon : MoonStar}
-      onClick={toggleTheme}
-      aria-label={`Switch to ${theme === "dark" ? "dim" : "dark"} theme`}
-      active={theme === "dim"}
+      icon={resolvedTheme === "dark" ? Sun : Moon}
+      appearance="bare"
+      onClick={() => setTheme(next)}
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
     />
   );
 }

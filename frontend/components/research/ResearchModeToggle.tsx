@@ -20,7 +20,7 @@ export function ResearchModeToggle({
   const title = unavailable
     ? "Web research isn't configured on the server"
     : enabled
-      ? "Research mode on — Rinti will search the web and cite sources"
+      ? "Research mode on: Rinti will search the web and cite sources"
       : "Turn on research mode to search the web";
 
   return (
@@ -29,14 +29,13 @@ export function ResearchModeToggle({
       onClick={() => onToggle(!enabled)}
       disabled={disabled || unavailable}
       aria-pressed={enabled}
-      aria-label="Toggle research mode"
       title={title}
       className={cn(
-        "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all duration-200 focus-ring",
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-[background-color,border-color,color] duration-150 focus-ring",
         enabled
-          ? "border-cyan-300/40 bg-cyan-500/15 text-cyan-100 shadow-glow-cyan"
-          : "border-white/10 bg-white/5 text-white/55 hover:border-white/20 hover:text-white/85",
-        (disabled || unavailable) && "cursor-not-allowed opacity-40"
+          ? "border-purple-400/40 bg-purple-500/15 text-purple-200"
+          : "border-fg/10 text-fg/55 hover:border-fg/20 hover:bg-fg/6 hover:text-fg/85",
+        (disabled || unavailable) && "cursor-not-allowed opacity-40 hover:bg-transparent"
       )}
     >
       <Globe size={13} />

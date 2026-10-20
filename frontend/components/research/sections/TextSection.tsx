@@ -11,8 +11,8 @@ export function TextSection({ section }: { section: AnswerSectionDto }) {
 
   return (
     <div className="glass-inset rounded-xl px-4 py-3.5">
-      {section.title && <h3 className="mb-1.5 text-sm font-medium text-white/90">{section.title}</h3>}
-      <CitedText text={text} className="whitespace-pre-wrap text-[13px] leading-relaxed text-white/75" />
+      {section.title && <h3 className="mb-1.5 text-sm font-medium text-fg/90">{section.title}</h3>}
+      <CitedText text={text} className="whitespace-pre-wrap text-[13px] leading-relaxed text-fg/75" />
     </div>
   );
 }

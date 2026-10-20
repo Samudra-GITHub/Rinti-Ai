@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
-import { AlertCircle, ArrowUp, Sparkles, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AlertCircle, ArrowDown, RotateCcw, X } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
-import { TypingIndicator } from "./TypingIndicator";
-import { PromptSuggestions } from "./PromptSuggestions";
+import { Composer, type ComposerHandle } from "./Composer";
+import { Hero, SuggestionRow } from "./Hero";
 import { RintiOrb } from "@/components/orb/RintiOrb";
-import { IconButton } from "@/ui/IconButton";
 import { useActiveModel } from "@/hooks/useActiveModel";
 import { useConversations } from "@/hooks/useConversations";
 import { extractSseEvents } from "@/lib/sse";
@@ -29,9 +28,12 @@ import type { Message } from "@/types/conversation";
 
 const EMPTY_ANSWER: ResearchAnswerDto = { title: "", query: "", overview: "", executive_summary: [], sections: [] };
 
+// Width of the reading column, shared by the thread and the composer so the
+// composer does not change size when it moves from the landing to the dock.
+const COLUMN = "mx-auto w-full max-w-[44rem]";
+
 interface ChatWindowProps {
   conversationId: string | null;
-  title: string | null;
   initialMessages: Message[];
   initialDraft?: string;
   loadError?: string | null;
@@ -41,27 +43,33 @@ function makeId() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+interface SubmitOptions {
+  /** Re-answer the conversation's last user message instead of sending a new one. */
+  regenerate?: boolean;
+}
+
 export function ChatWindow({
   conversationId,
-  title,
   initialMessages,
   initialDraft = "",
   loadError = null,
 }: ChatWindowProps) {
   const { activeModel } = useActiveModel();
-  const { conversations, refresh: refreshConversations } = useConversations();
-
-  // Prefer the live title from the shared conversations list (kept fresh by
-  // ConversationsProvider) so a rename made in the sidebar shows up here
-  // immediately, without needing a full page reload.
-  const liveTitle = conversations.find((c) => c.id === conversationId)?.title ?? title;
+  const { refresh: refreshConversations } = useConversations();
 
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [draft, setDraft] = useState(initialDraft);
   const [isStreaming, setIsStreaming] = useState(false);
   const [hasStreamedContent, setHasStreamedContent] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(loadError);
+  const [error, setError] = useState<{ message: string; retryable: boolean } | null>(
+    loadError ? { message: loadError, retryable: false } : null
+  );
+  const [pinnedToBottom, setPinnedToBottom] = useState(true);
+  const [canHover, setCanHover] = useState(false);
+
   const scrollRef = useRef<HTMLDivElement>(null);
+  const stickRef = useRef(true);
+  const composerRef = useRef<ComposerHandle>(null);
   const activeConversationIdRef = useRef<string | null>(conversationId);
   const abortRef = useRef<AbortController | null>(null);
   // True for exactly one [conversationId] effect run: the one caused by our
@@ -69,7 +77,7 @@ export function ChatWindow({
   // Router patches history.replaceState to keep useSearchParams in sync, so
   // the `conversationId` prop still changes even though we bypassed
   // router.replace() — this guard stops that from re-triggering the full
-  // reset below, which would wipe the researchAnswer/messages/errorMessage
+  // reset below, which would wipe the researchAnswer/messages/error
   // the live stream just finished setting.
   const selfNavigatedRef = useRef(false);
 
@@ -84,6 +92,10 @@ export function ChatWindow({
   // Id of a history message whose plain text is superseded by researchAnswer
   // above (the rehydrated structured render replaces its bubble entirely).
   const [suppressedMessageId, setSuppressedMessageId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCanHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -108,12 +120,13 @@ export function ChatWindow({
     }
 
     setMessages(initialMessages);
-    setErrorMessage(loadError);
+    setError(loadError ? { message: loadError, retryable: false } : null);
     setResearchSources([]);
     setResearchNotes([]);
     setResearchStage(null);
     setResearchAnswer(null);
     setSuppressedMessageId(null);
+    stickRef.current = true;
 
     // Rehydrate the sources panel + structured answer for the most recent
     // research turn in this conversation, so refresh renders identically to
@@ -141,12 +154,11 @@ export function ChatWindow({
   }, [conversationId]);
 
   useEffect(() => {
-    if (initialDraft) setDraft(initialDraft);
+    if (initialDraft) {
+      setDraft(initialDraft);
+      composerRef.current?.focus();
+    }
   }, [initialDraft]);
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, isStreaming]);
 
   useEffect(() => {
     return () => {
@@ -154,19 +166,43 @@ export function ChatWindow({
     };
   }, []);
 
-  async function handleSend() {
-    const text = draft.trim();
+  // --- scrolling: follow new content only while the reader is at the bottom ---
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "auto") => {
+    const el = scrollRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior });
+  }, []);
+
+  function handleScroll() {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 96;
+    stickRef.current = atBottom;
+    setPinnedToBottom(atBottom);
+  }
+
+  useEffect(() => {
+    if (stickRef.current) scrollToBottom("auto");
+  }, [messages, researchAnswer, researchStage, isStreaming, scrollToBottom]);
+
+  async function submit(rawText: string, { regenerate = false }: SubmitOptions = {}) {
+    const text = rawText.trim();
     if (!text || isStreaming) return;
 
-    const userMessage: Message = {
+    const optimisticUser: Message = {
       id: makeId(),
       role: "user",
       content: text,
       timestamp: new Date().toISOString(),
     };
-    setMessages((prev) => [...prev, userMessage]);
-    setDraft("");
-    setErrorMessage(null);
+
+    setMessages((prev) => {
+      if (!regenerate) return [...prev, optimisticUser];
+      // Regenerate: drop the previous reply, keep the question.
+      const last = prev[prev.length - 1];
+      return last?.role === "assistant" ? prev.slice(0, -1) : prev;
+    });
+    if (!regenerate) setDraft("");
+    setError(null);
     setIsStreaming(true);
     setHasStreamedContent(false);
     setResearchSources([]);
@@ -174,25 +210,38 @@ export function ChatWindow({
     setResearchStage(null);
     setResearchAnswer(null);
     setSuppressedMessageId(null);
+    stickRef.current = true;
+    setPinnedToBottom(true);
 
     const assistantId = makeId();
     let assistantStarted = false;
     let receivedStructuredAnswer = false;
     let receivedError = false;
     const wasNewConversation = !activeConversationIdRef.current;
+    // Whether the backend has stored this user turn. If not (offline, rate
+    // limit, validation), the text goes back into the composer instead.
+    let persisted = false;
 
     const controller = new AbortController();
     abortRef.current = controller;
 
-    // Route to research either because the user asked for it, or because the
-    // question needs fresh external facts (automatic routing, backend-classified).
-    let useResearch = researchMode && researchAvailable;
-    if (!useResearch && researchAvailable) {
-      const intent = await detectIntent(text);
-      useResearch = Boolean(intent?.needs_research);
+    function failBeforePersist(message: string) {
+      setError({ message, retryable: false });
+      if (!regenerate) {
+        setMessages((prev) => prev.filter((m) => m.id !== optimisticUser.id));
+        setDraft((current) => current || text);
+      }
     }
 
     try {
+      // Route to research either because the user asked for it, or because the
+      // question needs fresh external facts (automatic routing, backend-classified).
+      let useResearch = researchMode && researchAvailable && !regenerate;
+      if (!useResearch && researchAvailable && !regenerate) {
+        const intent = await detectIntent(text);
+        useResearch = Boolean(intent?.needs_research);
+      }
+
       const res = useResearch
         ? await fetch("/api/research", {
             method: "POST",
@@ -210,12 +259,17 @@ export function ChatWindow({
             body: JSON.stringify({
               message: text,
               conversation_id: activeConversationIdRef.current,
+              model: activeModel,
+              regenerate,
             }),
             signal: controller.signal,
           });
 
       const conversationIdHeader = res.headers.get("x-conversation-id");
-      if (conversationIdHeader) activeConversationIdRef.current = conversationIdHeader;
+      if (conversationIdHeader) {
+        activeConversationIdRef.current = conversationIdHeader;
+        persisted = true;
+      }
 
       if (!res.ok) {
         // Non-2xx replies are JSON errors, not SSE — surface the backend's
@@ -227,10 +281,10 @@ export function ChatWindow({
         } catch {
           // non-JSON body
         }
-        setErrorMessage(
+        failBeforePersist(
           detail ??
             (res.status >= 500
-              ? "Something went wrong on the server. Please try again."
+              ? "Something went wrong on our side. Your message is still in the box. Try sending it again."
               : "Rinti couldn't process that request. Please try again.")
         );
         return;
@@ -255,6 +309,7 @@ export function ChatWindow({
             delta?: string;
             conversationId?: string;
             message?: string;
+            code?: string;
             stage?: ResearchStage;
             label?: string;
             notes?: string[];
@@ -280,6 +335,7 @@ export function ChatWindow({
             );
           } else if (evt.event === "answer_meta") {
             receivedStructuredAnswer = true;
+            persisted = true;
             setHasStreamedContent(true);
             setResearchAnswer((prev) => ({
               ...(prev ?? EMPTY_ANSWER),
@@ -313,19 +369,28 @@ export function ChatWindow({
             setResearchStage(null);
           } else if (evt.event === "error") {
             receivedError = true;
-            setErrorMessage(payload.message ?? "Something went wrong. Please try again.");
+            const message = payload.message ?? "Something went wrong. Please try again.";
+            if (persisted) {
+              setError({ message, retryable: true });
+            } else {
+              failBeforePersist(message);
+            }
           }
         }
       }
 
       if (!assistantStarted && !receivedStructuredAnswer && !receivedError) {
-        setErrorMessage("Rinti didn't return a response. Please try again.");
+        if (persisted) {
+          setError({ message: "Rinti didn't return a response. Try again.", retryable: true });
+        } else {
+          failBeforePersist("Rinti didn't return a response. Please try again.");
+        }
       }
 
       // Update the URL to the real conversation id (so refresh preserves it) and
       // let the sidebar know a conversation was created/updated.
-      if (wasNewConversation && activeConversationIdRef.current) {
-        // A router.replace() here would make the parent ChatPageContent see a
+      if (wasNewConversation && activeConversationIdRef.current && persisted) {
+        // A router.replace() here would make the parent ChatScreen see a
         // new `c` search param and re-fetch — while that fetch is in flight it
         // renders a loading fallback INSTEAD of this ChatWindow, unmounting it
         // and discarding all the state the live stream just populated
@@ -333,150 +398,216 @@ export function ChatWindow({
         // the correct, current state in memory — it doesn't need a refetch,
         // just the address bar to reflect the real id (for refresh/bookmark).
         // history.replaceState does that without going through Next's router.
+        // The current path is kept so "/" stays "/" and "/chat" stays "/chat".
         selfNavigatedRef.current = true;
-        window.history.replaceState(null, "", `/chat?c=${activeConversationIdRef.current}`);
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}?c=${activeConversationIdRef.current}`
+        );
       }
       refreshConversations();
     } catch (err) {
-      if ((err as Error).name !== "AbortError") {
-        setErrorMessage("Couldn't reach Rinti. Check your connection and try again.");
+      if ((err as Error).name === "AbortError") {
+        // The user pressed Stop. Whatever had streamed so far stays on screen
+        // (and the backend saved it), so this is not an error.
+        if (activeConversationIdRef.current) refreshConversations();
+      } else if (persisted) {
+        setError({ message: "The connection dropped before the reply finished. Try again.", retryable: true });
+      } else {
+        failBeforePersist("Couldn't reach Rinti. Check your connection. Your message is still in the box.");
       }
     } finally {
       setIsStreaming(false);
       setResearchStage(null);
       abortRef.current = null;
+      if (canHover) composerRef.current?.focus();
     }
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
+  function handleStop() {
+    abortRef.current?.abort();
   }
 
+  const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
+
+  function handleRetry() {
+    if (lastUserMessage) submit(lastUserMessage.content, { regenerate: true });
+  }
+
+  const visibleMessages = messages.filter((message) => message.id !== suppressedMessageId);
   const hasMessages = messages.length > 0;
-  const showTypingIndicator = isStreaming && !hasStreamedContent;
+  const lastMessage = messages[messages.length - 1];
+  const showThinking = isStreaming && !hasStreamedContent && !researchStage;
+  const regenerateAvailable =
+    !isStreaming &&
+    !researchAnswer &&
+    lastMessage?.role === "assistant" &&
+    !lastMessage.researchSessionId &&
+    Boolean(lastUserMessage) &&
+    Boolean(activeConversationIdRef.current);
+
+  const placeholder = isStreaming
+    ? researchStage
+      ? "Rinti is researching…"
+      : "Rinti is replying… you can type your next message"
+    : researchMode
+      ? "Ask something to research…"
+      : hasMessages
+        ? "Message Rinti…"
+        : "Ask Rinti anything…";
+
+  const composerFooter = researchAvailable ? (
+    <>
+      <ResearchModeToggle
+        enabled={researchMode}
+        onToggle={setResearchMode}
+        available={researchAvailable}
+        disabled={isStreaming}
+      />
+      <span className="text-[11px] text-fg/35">
+        {researchMode
+          ? "Searches the web, takes longer, and cites sources"
+          : "Rinti searches the web on its own when a question needs it"}
+      </span>
+    </>
+  ) : undefined;
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-        <div>
-          <h1 className="text-sm font-medium text-white/90">{liveTitle ?? "New conversation"}</h1>
-          <p className="text-xs text-white/40">Connected to Rinti&apos;s backend</p>
-        </div>
-        {activeModel && (
-          <span className="glass-inset flex items-center gap-1.5 rounded-full px-3 py-1 text-xs text-white/70">
-            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-purple-400 to-cyan-400" />
-            {activeModel}
-          </span>
-        )}
-      </div>
+    <div className={`relative flex h-full min-h-0 flex-col ${hasMessages ? "" : "justify-center"}`}>
+      <LayoutGroup>
+        <AnimatePresence initial={false} mode="popLayout">
+          {!hasMessages && <Hero key="hero" />}
+        </AnimatePresence>
 
-      <div
-        ref={scrollRef}
-        data-lenis-prevent
-        className="flex-1 overflow-y-auto overscroll-contain px-6 py-6"
-      >
-        {hasMessages ? (
-          <div className="mx-auto flex max-w-2xl flex-col gap-5">
-            <AnimatePresence initial={false}>
-              {messages
-                .filter((message) => message.id !== suppressedMessageId)
-                .map((message) => (
-                  <ChatMessage key={message.id} message={message} />
-                ))}
-            </AnimatePresence>
-            {researchStage && (
-              <ResearchProgress
-                stage={researchStage}
-                label={researchLabel}
-                sourceCount={researchSources.length}
-              />
-            )}
-            {showTypingIndicator && !researchStage && <TypingIndicator />}
-            {researchAnswer && <ResearchAnswerRenderer answer={researchAnswer} />}
-            {researchSources.length > 0 && (
-              <SourcesPanel sources={researchSources} notes={researchNotes} />
-            )}
-          </div>
-        ) : (
-          <div className="mx-auto flex h-full max-w-lg flex-col items-center justify-center gap-6 text-center">
-            <RintiOrb size="md" active={isStreaming} />
-            <div>
-              <h2 className="text-lg font-medium text-white/90">How can I help today?</h2>
-              <p className="mt-1 text-sm text-white/45">
-                Ask anything, or start from a suggestion below.
-              </p>
+        {hasMessages && (
+          <div className="relative min-h-0 flex-1">
+            <div ref={scrollRef} onScroll={handleScroll} className="h-full overflow-y-auto overscroll-contain">
+              <div className={`${COLUMN} px-4 pb-10 pt-4 sm:px-6`}>
+                <div className="flex flex-col gap-7">
+                  {visibleMessages.map((message, index) => {
+                    const isLastVisible = index === visibleMessages.length - 1;
+                    const isLiveAssistant = isStreaming && message.id === lastMessage?.id && message.role === "assistant";
+                    return (
+                      <ChatMessage
+                        key={message.id}
+                        message={message}
+                        isStreaming={isLiveAssistant}
+                        canRegenerate={regenerateAvailable && isLastVisible && message.role === "assistant"}
+                        onRegenerate={() => lastUserMessage && submit(lastUserMessage.content, { regenerate: true })}
+                      />
+                    );
+                  })}
+
+                  {researchStage && (
+                    <ResearchProgress stage={researchStage} label={researchLabel} sourceCount={researchSources.length} />
+                  )}
+                  {showThinking && (
+                    <div className="flex items-center gap-3.5" role="status" aria-live="polite">
+                      <RintiOrb size="xs" active />
+                      <span className="text-sm text-fg/45">Thinking…</span>
+                    </div>
+                  )}
+                  {researchAnswer && <ResearchAnswerRenderer answer={researchAnswer} />}
+                  {researchSources.length > 0 && <SourcesPanel sources={researchSources} notes={researchNotes} />}
+                </div>
+              </div>
             </div>
-            <PromptSuggestions onSelect={setDraft} />
+
+            <AnimatePresence>
+              {!pinnedToBottom && (
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={() => {
+                    stickRef.current = true;
+                    scrollToBottom("smooth");
+                  }}
+                  aria-label="Scroll to latest message"
+                  className="absolute bottom-3 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-fg/12 bg-surface/90 text-fg/70 shadow-composer backdrop-blur hover:text-fg focus-ring"
+                >
+                  <ArrowDown size={16} />
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         )}
-      </div>
 
-      {errorMessage && (
-        <div className="mx-6 mb-3 flex items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-500/10 px-4 py-2.5 text-sm text-red-200">
-          <span className="flex items-center gap-2">
-            <AlertCircle size={14} className="shrink-0" />
-            {errorMessage}
-          </span>
-          <button
-            onClick={() => setErrorMessage(null)}
-            aria-label="Dismiss error"
-            className="rounded-full p-1 text-red-200/70 hover:bg-white/10 hover:text-red-100 focus-ring"
-          >
-            <X size={13} />
-          </button>
-        </div>
-      )}
+        <motion.div
+          layout="position"
+          key="composer"
+          transition={{ type: "spring", stiffness: 260, damping: 32 }}
+          className={hasMessages ? "px-4 pb-4 pt-1 pb-safe sm:px-6" : "px-4 sm:px-6"}
+        >
+          <div className={COLUMN}>
+            <AnimatePresence initial={false}>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.18 }}
+                  role="alert"
+                  className="mb-3 flex items-start justify-between gap-3 rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200"
+                >
+                  <span className="flex min-w-0 items-start gap-2.5">
+                    <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                    <span className="min-w-0 break-words">{error.message}</span>
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1">
+                    {error.retryable && (
+                      <button
+                        type="button"
+                        onClick={handleRetry}
+                        className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium hover:bg-red-500/15 focus-ring"
+                      >
+                        <RotateCcw size={12} />
+                        Retry
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setError(null)}
+                      aria-label="Dismiss error"
+                      className="rounded-full p-1 opacity-70 hover:bg-red-500/15 hover:opacity-100 focus-ring"
+                    >
+                      <X size={13} />
+                    </button>
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-      <div className="border-t border-white/5 px-6 py-4">
-        <div className="glass-panel mx-auto flex max-w-2xl flex-col gap-2 rounded-2xl p-3">
-          <div className="flex items-end gap-3">
-            <Sparkles size={18} className="mb-2 shrink-0 text-purple-300/70" />
-            <textarea
+            <Composer
+              ref={composerRef}
               value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              disabled={isStreaming}
-              placeholder={
-                isStreaming
-                  ? researchStage
-                    ? "Rinti is researching..."
-                    : "Rinti is responding..."
-                  : researchMode
-                    ? "Ask something to research..."
-                    : "Message Rinti..."
-              }
-              className="max-h-40 min-h-[24px] flex-1 resize-none bg-transparent py-1 text-sm text-white/90 placeholder:text-white/30 focus:outline-none disabled:opacity-50"
-            />
-            <IconButton
-              icon={ArrowUp}
-              aria-label="Send message"
-              onClick={handleSend}
-              disabled={!draft.trim() || isStreaming}
-              className="mb-0 bg-gradient-to-r from-purple-500 to-cyan-500 text-white disabled:from-white/10 disabled:to-white/10 disabled:text-white/30"
+              onChange={setDraft}
+              onSubmit={() => submit(draft)}
+              onStop={handleStop}
+              isStreaming={isStreaming}
+              placeholder={placeholder}
+              autoFocus={canHover && !hasMessages}
+              footer={composerFooter}
+              size={hasMessages ? "dock" : "hero"}
             />
           </div>
+        </motion.div>
 
-          <div className="flex items-center gap-2 pl-8">
-            <ResearchModeToggle
-              enabled={researchMode}
-              onToggle={setResearchMode}
-              available={researchAvailable}
-              disabled={isStreaming}
+        <AnimatePresence initial={false} mode="popLayout">
+          {!hasMessages && (
+            <SuggestionRow
+              key="suggestions"
+              onSelect={(prompt) => {
+                setDraft(prompt);
+                composerRef.current?.focus();
+              }}
             />
-            <span className="text-[11px] text-white/30">
-              {!researchAvailable
-                ? "Web research unavailable"
-                : researchMode
-                  ? "Searching the web · takes longer · answers are cited"
-                  : "Rinti searches the web automatically when a question needs it"}
-            </span>
-          </div>
-        </div>
-      </div>
+          )}
+        </AnimatePresence>
+      </LayoutGroup>
     </div>
   );
 }

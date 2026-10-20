@@ -1,59 +1,52 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Asterisk } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-type OrbSize = "sm" | "md" | "lg" | "xl";
+type MarkSize = "xs" | "sm" | "md" | "lg";
 
 interface RintiOrbProps {
-  size?: OrbSize;
+  size?: MarkSize;
+  /** Pulses a soft ring while Rinti is working. Respects reduced motion via MotionConfig. */
   active?: boolean;
   className?: string;
 }
 
-const sizeMap: Record<OrbSize, string> = {
-  sm: "h-10 w-10",
-  md: "h-16 w-16",
-  lg: "h-28 w-28",
-  xl: "h-44 w-44",
+const boxSize: Record<MarkSize, string> = {
+  xs: "h-6 w-6 rounded-[0.45rem]",
+  sm: "h-8 w-8 rounded-[0.6rem]",
+  md: "h-12 w-12 rounded-2xl",
+  lg: "h-16 w-16 rounded-[1.25rem]",
 };
 
-export function RintiOrb({ size = "lg", active = false, className }: RintiOrbProps) {
+const iconSize: Record<MarkSize, number> = { xs: 13, sm: 17, md: 24, lg: 32 };
+
+/**
+ * The Rinti mark: an asterisk on a small glass tile with a faint green glow,
+ * the node the reference's circuit traces lead out of. (The file keeps its old
+ * name so existing imports stay valid.)
+ */
+export function RintiOrb({ size = "sm", active = false, className }: RintiOrbProps) {
   return (
-    <div className={cn("relative flex items-center justify-center", sizeMap[size], className)}>
-      <div className="absolute inset-[-40%] rounded-full bg-aura-gradient blur-2xl" />
-
-      <motion.div
-        className="absolute inset-0 rounded-full border border-purple-300/20"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div
-        className="absolute inset-[10%] rounded-full border border-cyan-300/20"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-      />
-
-      <motion.div
-        className="absolute inset-[15%] rounded-full bg-orb-gradient shadow-glow-purple"
-        animate={
-          active
-            ? { scale: [1, 1.15, 1], opacity: [0.9, 1, 0.9] }
-            : { scale: [1, 1.06, 1], opacity: [0.85, 1, 0.85] }
-        }
-        transition={{
-          duration: active ? 1.1 : 4.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        whileHover={{ scale: 1.08 }}
-      />
-
-      <motion.div
-        className="absolute inset-[32%] rounded-full bg-white/80 blur-[2px]"
-        animate={{ opacity: [0.5, 0.85, 0.5] }}
-        transition={{ duration: active ? 0.9 : 3.2, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <div
+      aria-hidden
+      className={cn(
+        "relative flex shrink-0 items-center justify-center border border-fg/15 bg-fg/[0.07]",
+        "shadow-[inset_0_1px_0_0_rgb(var(--fg)/0.14),0_0_20px_-6px_rgb(var(--accent)/0.55)]",
+        boxSize[size],
+        className
+      )}
+    >
+      <Asterisk size={iconSize[size]} strokeWidth={2.4} className="text-fg" />
+      {active && (
+        <motion.span
+          className="absolute inset-0 rounded-[inherit] border border-purple-300/60"
+          initial={{ opacity: 0.7, scale: 1 }}
+          animate={{ opacity: 0, scale: 1.55 }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
+        />
+      )}
     </div>
   );
 }

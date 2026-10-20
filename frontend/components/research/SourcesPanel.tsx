@@ -18,11 +18,11 @@ export function SourcesPanel({ sources, notes = [], defaultOpen = true }: Source
   if (sources.length === 0) return null;
 
   return (
-    <div className="glass-panel rounded-2xl px-3 py-2.5">
+    <div className="rounded-2xl border border-fg/10 bg-fg/[0.03] px-3 py-2.5">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2 text-left text-xs font-medium uppercase tracking-wider text-white/45 hover:text-white/70 focus-ring"
+        className="flex w-full items-center gap-2 text-left text-xs font-medium uppercase tracking-wider text-fg/45 hover:text-fg/70 focus-ring"
       >
         <Library size={13} />
         {sources.length} source{sources.length === 1 ? "" : "s"}

@@ -10,10 +10,10 @@ export function KeyFindingsSection({ section }: { section: AnswerSectionDto }) {
 
   return (
     <div className="glass-inset rounded-xl px-4 py-3.5">
-      {section.title && <h3 className="mb-2 text-sm font-medium text-white/90">{section.title}</h3>}
+      {section.title && <h3 className="mb-2 text-sm font-medium text-fg/90">{section.title}</h3>}
       <ul className="flex flex-col gap-2">
         {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-white/75">
+          <li key={i} className="flex items-start gap-2 text-[13px] leading-relaxed text-fg/75">
             <Sparkle size={12} className="mt-1 shrink-0 text-cyan-300/70" />
             <CitedText text={item} />
           </li>

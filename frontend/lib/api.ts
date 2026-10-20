@@ -45,6 +45,13 @@ export interface ModelAvailabilityDto {
   available: boolean;
 }
 
+export interface SettingsDto {
+  tts_enabled: boolean;
+  wake_word_enabled: boolean;
+  memory_enabled: boolean;
+  voice_id: string;
+}
+
 const MUTATING_METHODS = new Set(["POST", "PATCH", "DELETE", "PUT"]);
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -137,4 +144,8 @@ export const api = {
     request<{ status: string; id: string }>(`/api/memory/${id}`, { method: "DELETE" }),
 
   listModels: () => request<ModelAvailabilityDto[]>("/api/models"),
+
+  getSettings: () => request<SettingsDto>("/api/settings"),
+  updateSettings: (patch: Partial<SettingsDto>) =>
+    request<SettingsDto>("/api/settings", { method: "PATCH", body: JSON.stringify(patch) }),
 };

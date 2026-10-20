@@ -8,6 +8,8 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: LucideIcon;
   size?: "sm" | "md" | "lg";
   active?: boolean;
+  /** "bare" has no resting border (for dense toolbars); "outline" is the default. */
+  appearance?: "outline" | "bare";
   "aria-label": string;
 }
 
@@ -18,27 +20,33 @@ const sizeClasses = {
 };
 
 const iconSizes = {
-  sm: 16,
-  md: 18,
+  sm: 15,
+  md: 17,
   lg: 20,
 };
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ icon: Icon, size = "md", active = false, className, ...props }, ref) => {
+  (
+    { icon: Icon, size = "md", active = false, appearance = "outline", type = "button", className, ...props },
+    ref
+  ) => {
     return (
       <button
         ref={ref}
+        type={type}
         className={cn(
-          "inline-flex items-center justify-center rounded-full border transition-all duration-200 focus-ring",
+          "inline-flex shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color,transform,opacity] duration-150 active:scale-95 disabled:pointer-events-none disabled:opacity-40 focus-ring",
           active
-            ? "border-purple-400/50 bg-purple-500/15 text-white"
-            : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10 hover:text-white",
+            ? "border-purple-400/40 bg-purple-500/15 text-fg"
+            : appearance === "outline"
+              ? "border-fg/10 bg-fg/[0.04] text-fg/65 hover:border-fg/20 hover:bg-fg/10 hover:text-fg"
+              : "border-transparent text-fg/55 hover:bg-fg/8 hover:text-fg",
           sizeClasses[size],
           className
         )}
         {...props}
       >
-        <Icon size={iconSizes[size]} />
+        <Icon size={iconSizes[size]} strokeWidth={1.8} />
       </button>
     );
   }

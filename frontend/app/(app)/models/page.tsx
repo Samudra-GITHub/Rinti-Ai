@@ -1,46 +1,37 @@
 "use client";
 
 import { ModelCard } from "@/components/models/ModelCard";
-import { ModelSelector } from "@/components/models/ModelSelector";
+import { PageShell } from "@/components/layout/PageShell";
 import { useActiveModel } from "@/hooks/useActiveModel";
 
 export default function ModelsPage() {
   const { activeModel, setActiveModel, availableModels, isLoading, error } = useActiveModel();
 
   return (
-    <div className="mx-auto max-w-6xl py-6">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-white/95">Models</h1>
-          <p className="mt-1 text-sm text-white/45">
-            Models the backend reports as configured and available.
-          </p>
-        </div>
-        <ModelSelector />
-      </div>
-
+    <PageShell title="Models" description="The models the server reports as configured and ready to use.">
       {isLoading ? (
-        <p className="text-sm text-white/40">Loading models…</p>
+        <div className="space-y-3" role="status" aria-label="Loading models">
+          <div className="h-[4.25rem] animate-pulse rounded-2xl bg-fg/[0.05]" />
+        </div>
       ) : error ? (
-        <p className="rounded-xl border border-red-400/25 bg-red-500/10 px-4 py-2.5 text-sm text-red-200">
+        <p
+          role="alert"
+          className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-200"
+        >
           {error}
         </p>
       ) : availableModels.length === 0 ? (
-        <p className="text-sm text-white/40">
-          No model is currently available — check the backend&apos;s provider configuration.
-        </p>
+        <div className="rounded-2xl border border-fg/10 px-5 py-8 text-center">
+          <p className="text-sm text-fg/70">No model is available right now.</p>
+          <p className="mt-1 text-[13px] text-fg/40">Check that the server has an API key configured for its model provider.</p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="space-y-3">
           {availableModels.map((model) => (
-            <ModelCard
-              key={model.id}
-              model={model}
-              active={model.id === activeModel}
-              onSelect={setActiveModel}
-            />
+            <ModelCard key={model.id} model={model} active={model.id === activeModel} onSelect={setActiveModel} />
           ))}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

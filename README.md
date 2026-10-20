@@ -27,9 +27,9 @@
 
 ---
 
-Rinti AI pairs an OpenAI-compatible chat backend (Groq by default) with a research engine that plans sub-queries, searches, extracts sources and synthesises a cited answer, instead of just forwarding a prompt. Sessions use real accounts: Argon2-hashed passwords, HttpOnly session cookies and a CSRF header check on every state-changing route. Because the model and search keys are shared server-side, usage is capped per user per day.
+Rinti AI pairs an OpenAI-compatible chat backend (Groq by default) with a research engine that plans sub-queries, searches, extracts sources and synthesises a cited answer, instead of just forwarding a prompt. There is no sign-in: every request runs as one shared local user, and state-changing routes still require an `X-Rinti-Client` header as CSRF mitigation. Because the model and search keys are shared server-side, usage is capped per day.
 
-The backend is FastAPI with SQLite for local development and Postgres in production; the frontend is Next.js with a dark, orb-centred interface.
+The backend is FastAPI with SQLite for local development and Postgres in production; the frontend is Next.js with a light and dark interface: a landing hero that turns into the conversation when you send your first message.
 
 ## Run it
 
@@ -66,14 +66,13 @@ The frontend calls same-origin `/api/*`, which only `vercel.json` routes to the 
       <p>Quick and Standard budgets. Intent detection, query planning, Tavily search, page extraction (trafilatura and BeautifulSoup), claim evaluation and synthesis, rendered with a sources panel and inline citations.</p>
     </td>
     <td width="50%" valign="top">
-      <img src="docs/screenshots/login.webp" alt="Sign-in screen" width="60%" />
-      <h3>Real accounts</h3>
-      <p>Register, login, logout and session restore. Passwords are hashed with Argon2, sessions use HttpOnly cookies, and state-changing routes require an <code>X-Rinti-Client</code> header as CSRF mitigation.</p>
+      <h3>Reading and writing experience</h3>
+      <p>Markdown replies with highlighted code blocks and tables, a growing composer (Enter sends, Shift+Enter adds a line), Stop, Regenerate, copy, and history grouped by date. Light, dark or system theme, and reduced-motion support.</p>
     </td>
   </tr>
 </table>
 
-**Also:** per-user daily caps on chat messages and research queries; Lenis smooth scrolling and a gradient background with an orb.
+**Also:** per-user daily caps on chat messages and research queries; an ambient animated background that pauses when hidden and turns off for reduced motion.
 
 ## Tech stack
 
@@ -81,7 +80,7 @@ The frontend calls same-origin `/api/*`, which only `vercel.json` routes to the 
 | :-- | :-- |
 | Backend | FastAPI, Uvicorn, Pydantic and pydantic-settings, the `openai` client, Argon2, trafilatura, BeautifulSoup |
 | Storage | SQLite locally, Postgres in production (`psycopg2`) |
-| Frontend | Next.js 15 (App Router), React 19, TypeScript 5, Tailwind CSS 3, Framer Motion, Lenis |
+| Frontend | Next.js 15 (App Router), React 19, TypeScript 5, Tailwind CSS 3, Framer Motion, react-markdown with highlight.js |
 | Services | Groq or any OpenAI-compatible LLM, Tavily search |
 
 ## Architecture
@@ -95,7 +94,7 @@ flowchart LR
     A --> D[(SQLite / Postgres)]
 ```
 
-The browser only talks to the Next.js origin. `middleware.ts` is a UX-only redirect based on whether a session cookie is present; the real check is in the backend, where every protected route validates the session. Research runs as a pipeline (intent, plan, search, extract, evaluate, synthesise) with a budget per mode in `backend/research/config.py`.
+The browser only talks to the Next.js origin. Chat replies follow one response policy defined in `backend/core/personality.py`, so style changes happen in one place. Research runs as a pipeline (intent, plan, search, extract, evaluate, synthesise) with a budget per mode in `backend/research/config.py`.
 
 ```text
 Rinti-Ai/
@@ -110,7 +109,7 @@ Rinti-Ai/
 │   ├── voice/           Speech helpers (router not mounted, see below)
 │   └── scripts/         migrate_sqlite_to_postgres.py
 ├── frontend/
-│   ├── app/             (app)/ chat, memory, models, settings; (auth)/ login, register
+│   ├── app/             (app)/ landing + chat (one screen), memory, models, settings
 │   └── components/  hooks/  providers/  lib/  ui/  styles/  middleware.ts
 ├── vercel.json          Frontend and backend services, /api routing
 └── docs/screenshots/
@@ -164,6 +163,7 @@ Variables are read from `backend/.env`. Never commit it.
 | `ALLOWED_ORIGINS` | Comma-separated CORS allowlist | `http://localhost:3000,http://127.0.0.1:3000` |
 | `MAX_CHAT_MESSAGES_PER_DAY` | Per-user chat cap | `40` |
 | `MAX_RESEARCH_QUERIES_PER_DAY` | Per-user research cap | `8` |
+| `MAX_RESPONSE_TOKENS` | Safety ceiling for one chat reply (length is governed by the response policy, not this) | `4096` |
 | `HOST`, `PORT` | Server bind | `0.0.0.0`, `8000` |
 
 ### Deploy

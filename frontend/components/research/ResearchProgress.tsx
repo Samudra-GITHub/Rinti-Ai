@@ -27,11 +27,11 @@ export function ResearchProgress({ stage, label, sourceCount }: ResearchProgress
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel mx-auto flex max-w-2xl flex-col gap-3 rounded-2xl px-4 py-3"
+      className="flex w-full flex-col gap-3 rounded-2xl border border-fg/10 bg-fg/[0.03] px-4 py-3"
       role="status"
       aria-live="polite"
     >
-      <div className="flex items-center gap-2 text-sm text-white/80">
+      <div className="flex items-center gap-2 text-sm text-fg/80">
         <motion.span
           animate={{ rotate: 360 }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
@@ -41,7 +41,7 @@ export function ResearchProgress({ stage, label, sourceCount }: ResearchProgress
         </motion.span>
         {label ?? STAGES[Math.max(activeIndex, 0)].label}
         {sourceCount > 0 && (
-          <span className="text-xs text-white/40">
+          <span className="text-xs text-fg/40">
             · {sourceCount} source{sourceCount === 1 ? "" : "s"}
           </span>
         )}
@@ -58,13 +58,13 @@ export function ResearchProgress({ stage, label, sourceCount }: ResearchProgress
                   "h-0.5 rounded-full transition-colors duration-500",
                   done && "bg-cyan-400/60",
                   active && "bg-gradient-to-r from-purple-400 to-cyan-400",
-                  !done && !active && "bg-white/10"
+                  !done && !active && "bg-fg/10"
                 )}
               />
               <span
                 className={cn(
                   "hidden text-[10px] transition-colors duration-300 sm:block",
-                  active ? "text-white/60" : "text-white/25"
+                  active ? "text-fg/60" : "text-fg/25"
                 )}
               >
                 {s.label.split(" ")[0]}

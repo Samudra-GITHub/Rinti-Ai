@@ -8,14 +8,15 @@ interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode;
 }
 
-export function Chip({ className, active = false, icon, children, ...props }: ChipProps) {
+export function Chip({ className, active = false, icon, children, type = "button", ...props }: ChipProps) {
   return (
     <button
+      type={type}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-all duration-200 focus-ring",
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.98] focus-ring",
         active
-          ? "border-purple-400/50 bg-purple-500/15 text-white shadow-glow-purple"
-          : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10 hover:text-white",
+          ? "border-purple-400/40 bg-purple-500/15 text-fg"
+          : "border-fg/10 bg-fg/[0.04] text-fg/70 hover:border-fg/20 hover:bg-fg/8 hover:text-fg",
         className
       )}
       {...props}

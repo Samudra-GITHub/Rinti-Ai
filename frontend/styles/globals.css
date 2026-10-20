@@ -2,104 +2,543 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ------------------------------------------------------------------------
+   Design tokens. Colors are space-separated RGB channels so Tailwind can add
+   alpha (`bg-fg/5`). The theme is chosen by [data-theme] on <html>, set before
+   first paint by the inline script in app/layout.tsx.
+   ------------------------------------------------------------------------ */
+/* Palette follows the reference: green-black with one emerald/mint accent. */
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
-  --bg-base: #050507;
+
+  --page: 3 5 4;
+  --bg: 5 8 7;
+  --surface: 10 15 13;
+  --elevated: 16 23 20;
+  --fg: 232 240 236;
+  --shadow-strength: 0.75;
+  --accent: 52 224 140;
+  --on-accent: 3 22 13;
+
+  --p-50: 236 253 245;
+  --p-100: 209 250 229;
+  --p-200: 167 243 208;
+  --p-300: 110 231 183;
+  --p-400: 52 211 153;
+  --p-500: 16 185 129;
+  --p-600: 5 150 105;
+  --p-700: 4 120 87;
+  --p-800: 6 95 70;
+  --p-900: 6 78 59;
+
+  --c-50: 240 253 250;
+  --c-100: 204 251 241;
+  --c-200: 153 246 228;
+  --c-300: 94 234 212;
+  --c-400: 45 212 191;
+  --c-500: 20 184 166;
+  --c-600: 13 148 136;
+  --c-700: 15 118 110;
+  --c-800: 17 94 89;
+  --c-900: 19 78 74;
+
+  --particle: 130 240 190;
+  --aurora-a: 40 205 135;
+  --aurora-b: 18 150 125;
+  --aurora-alpha: 0.2;
+  --grain-opacity: 0.04;
 }
 
-html.dim {
-  --bg-base: #0c0c12;
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --page: 232 240 236;
+  --bg: 244 248 245;
+  --surface: 255 255 255;
+  --elevated: 255 255 255;
+  --fg: 12 26 19;
+  --shadow-strength: 0.16;
+  --accent: 12 124 76;
+  --on-accent: 255 255 255;
+
+  --p-50: 6 78 59;
+  --p-100: 6 95 70;
+  --p-200: 4 120 87;
+  --p-300: 5 126 88;
+  --p-400: 5 150 105;
+  --p-500: 16 185 129;
+  --p-600: 52 211 153;
+  --p-700: 110 231 183;
+  --p-800: 167 243 208;
+  --p-900: 209 250 229;
+
+  --c-50: 19 78 74;
+  --c-100: 17 94 89;
+  --c-200: 15 118 110;
+  --c-300: 13 148 136;
+  --c-400: 20 184 166;
+  --c-500: 45 212 191;
+  --c-600: 94 234 212;
+  --c-700: 153 246 228;
+  --c-800: 204 251 241;
+  --c-900: 240 253 250;
+
+  --particle: 16 140 90;
+  --aurora-a: 60 200 140;
+  --aurora-b: 40 170 150;
+  --aurora-alpha: 0.2;
+  --grain-opacity: 0.05;
 }
 
 html,
 body {
   height: 100%;
-  background-color: var(--bg-base);
-  transition: background-color 0.4s ease;
+  background-color: rgb(var(--page));
+  transition: background-color 0.3s ease;
 }
 
 body {
-  color: rgba(245, 245, 250, 0.92);
+  color: rgb(var(--fg) / 0.92);
   font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.35);
-  color: #fff;
+  background: rgb(var(--p-500) / 0.35);
 }
 
-/* Custom scrollbars */
+/* Thin, neutral scrollbars (standard properties first, WebKit as fallback). */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(167, 139, 250, 0.35) transparent;
+  scrollbar-color: rgb(var(--fg) / 0.18) transparent;
 }
 
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+@supports not (scrollbar-color: auto) {
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--fg) / 0.18);
+    border-radius: 9999px;
+  }
 }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
+:focus-visible {
+  outline: 2px solid rgb(var(--p-400) / 0.8);
+  outline-offset: 2px;
 }
 
-*::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(167, 139, 250, 0.45), rgba(103, 232, 249, 0.35));
-  border-radius: 9999px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(167, 139, 250, 0.7), rgba(103, 232, 249, 0.55));
-}
-
-/* Glassmorphism utilities */
 @layer utilities {
+  /* Surfaces. Kept as named utilities so pages and components share one look. */
   .glass {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgb(var(--fg) / 0.045);
+    border: 1px solid rgb(var(--fg) / 0.09);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   .glass-panel {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 20px 60px -30px rgba(0, 0, 0, 0.8);
+    background: rgb(var(--surface) / 0.72);
+    border: 1px solid rgb(var(--fg) / 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 0 rgb(var(--fg) / 0.04) inset, 0 20px 60px -34px rgb(0 0 0 / var(--shadow-strength));
   }
 
+  /* Quiet tint for grouped content (research sections): no outline, so
+     sections read as part of the page rather than stacked boxes. */
   .glass-inset {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgb(var(--fg) / 0.03);
   }
 
+  /* Accent-colored text (solid; gradient text is deliberately avoided). */
   .text-gradient {
-    background: linear-gradient(90deg, #cbb8ff, #67e8f9);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: rgb(var(--p-300));
   }
 
   .focus-ring {
     outline: none;
   }
-
   .focus-ring:focus-visible {
-    outline: 2px solid rgba(167, 139, 250, 0.7);
+    outline: 2px solid rgb(var(--p-400) / 0.8);
     outline-offset: 2px;
+  }
+
+  .dvh-screen {
+    height: 100vh;
+    height: 100dvh;
+  }
+  .min-dvh-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 0px);
   }
 }
 
-/* Lenis smooth scroll defaults */
-html.lenis {
-  height: auto;
+/* ------------------------------------------------------------------------
+   Composer textarea: grows with its content where supported (field-sizing),
+   and is resized from JS otherwise (see Composer.tsx).
+   ------------------------------------------------------------------------ */
+.composer-input {
+  width: 100%;
+  resize: none;
+  field-sizing: content;
+  min-block-size: 1.5lh;
+  max-block-size: 9lh;
+  overflow-y: auto;
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
+/* ------------------------------------------------------------------------
+   Ambient scene inside the stage: a diagonal light shaft, a floor glow and
+   green particles. Opacity/transform animation only; all of it stops for
+   reduced motion.
+   ------------------------------------------------------------------------ */
+.shaft {
+  position: absolute;
+  top: -30%;
+  left: -12%;
+  width: 78%;
+  height: 160%;
+  transform: rotate(-14deg);
+  transform-origin: 50% 0;
+  background: linear-gradient(
+    100deg,
+    transparent 22%,
+    rgb(var(--aurora-a) / 0.5) 46%,
+    rgb(var(--aurora-a) / 0.12) 62%,
+    transparent 80%
+  );
+  filter: blur(46px);
+  opacity: var(--aurora-alpha);
+  will-change: opacity, transform;
+  animation: shaft-breathe 16s ease-in-out infinite;
+}
+.shaft-calm {
+  opacity: calc(var(--aurora-alpha) * 0.55);
+}
+.floor-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -38%;
+  width: 120%;
+  height: 70%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 50%, rgb(var(--aurora-b) / 0.5), transparent 68%);
+  filter: blur(40px);
+  opacity: calc(var(--aurora-alpha) * 1.1);
+}
+.floor-glow-calm {
+  opacity: calc(var(--aurora-alpha) * 0.5);
 }
 
-.lenis.lenis-stopped {
+@keyframes shaft-breathe {
+  0%,
+  100% {
+    transform: rotate(-14deg) translate3d(0, 0, 0);
+    opacity: var(--aurora-alpha);
+  }
+  50% {
+    transform: rotate(-11deg) translate3d(3%, 1%, 0);
+    opacity: calc(var(--aurora-alpha) * 1.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shaft,
+  .animate-caret,
+  .animate-shimmer {
+    animation: none;
+  }
+}
+:root[data-motion="reduce"] .shaft,
+:root[data-motion="reduce"] .animate-caret,
+:root[data-motion="reduce"] .animate-shimmer {
+  animation: none;
+}
+
+/* ------------------------------------------------------------------------
+   Signature surfaces from the reference: hairline border plus a bright 1px
+   light along the top edge. `.edge-light` suits glass cards; `.stage` is the
+   large framed canvas.
+   ------------------------------------------------------------------------ */
+.edge-light {
+  position: relative;
+}
+.edge-light::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--p-300) / 0.6), transparent);
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.edge-light:hover::before,
+.edge-light:focus-within::before {
+  opacity: 1;
+}
+
+.stage {
+  position: relative;
+  isolation: isolate;
   overflow: hidden;
+  background: rgb(var(--bg));
+  border: 1px solid rgb(var(--fg) / 0.09);
+  box-shadow:
+    inset 0 1px 0 0 rgb(var(--p-300) / 0.14),
+    0 40px 90px -50px rgb(0 0 0 / var(--shadow-strength));
+}
+.stage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  z-index: 20;
+  background: linear-gradient(90deg, transparent, rgb(var(--p-300) / 0.75), transparent);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------------
+   Reading typography for assistant messages (rendered Markdown).
+   ------------------------------------------------------------------------ */
+.prose-rinti {
+  font-size: 0.9688rem;
+  line-height: 1.75;
+  color: rgb(var(--fg) / 0.9);
+  overflow-wrap: anywhere;
+}
+.prose-rinti > :first-child {
+  margin-top: 0;
+}
+.prose-rinti > :last-child {
+  margin-bottom: 0;
+}
+.prose-rinti p {
+  margin: 0 0 1em;
+}
+.prose-rinti strong {
+  font-weight: 600;
+  color: rgb(var(--fg));
+}
+.prose-rinti em {
+  font-style: italic;
+}
+.prose-rinti a {
+  color: rgb(var(--p-300));
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--p-300) / 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+}
+.prose-rinti a:hover {
+  text-decoration-color: rgb(var(--p-300));
+}
+.prose-rinti h1,
+.prose-rinti h2,
+.prose-rinti h3,
+.prose-rinti h4 {
+  color: rgb(var(--fg));
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 1.7em 0 0.55em;
+}
+.prose-rinti h1 {
+  font-size: 1.35rem;
+}
+.prose-rinti h2 {
+  font-size: 1.18rem;
+}
+.prose-rinti h3 {
+  font-size: 1.05rem;
+}
+.prose-rinti h4 {
+  font-size: 0.97rem;
+}
+.prose-rinti ul,
+.prose-rinti ol {
+  margin: 0 0 1em;
+  padding-left: 1.4em;
+}
+.prose-rinti ul {
+  list-style: disc;
+}
+.prose-rinti ol {
+  list-style: decimal;
+}
+.prose-rinti li {
+  margin: 0.3em 0;
+  padding-left: 0.2em;
+}
+.prose-rinti li::marker {
+  color: rgb(var(--fg) / 0.4);
+}
+.prose-rinti li > ul,
+.prose-rinti li > ol {
+  margin: 0.3em 0 0.3em;
+}
+.prose-rinti blockquote {
+  margin: 1.1em 0;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 2px solid rgb(var(--p-400) / 0.5);
+  color: rgb(var(--fg) / 0.7);
+}
+.prose-rinti hr {
+  margin: 1.6em 0;
+  border: 0;
+  border-top: 1px solid rgb(var(--fg) / 0.1);
+}
+.prose-rinti :not(pre) > code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.86em;
+  padding: 0.14em 0.4em;
+  border-radius: 0.4rem;
+  background: rgb(var(--fg) / 0.08);
+  color: rgb(var(--fg));
+}
+
+/* Tables: scroll sideways inside their own box instead of widening the page. */
+.prose-rinti .table-wrap {
+  margin: 1.2em 0;
+  overflow-x: auto;
+  border: 1px solid rgb(var(--fg) / 0.1);
+  border-radius: 0.8rem;
+}
+.prose-rinti table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.55;
+}
+.prose-rinti th,
+.prose-rinti td {
+  padding: 0.6em 0.9em;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgb(var(--fg) / 0.08);
+}
+.prose-rinti th {
+  font-weight: 600;
+  color: rgb(var(--fg));
+  background: rgb(var(--fg) / 0.04);
+  white-space: nowrap;
+}
+.prose-rinti tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Code blocks are dark in both themes (color-scheme override, per the
+   component-specific theme guidance), so syntax colors only need one palette. */
+.code-block {
+  color-scheme: dark;
+  margin: 1.2em 0;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: #050a08;
+  border: 1px solid rgb(255 255 255 / 0.08);
+}
+.code-block-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.6rem 0.45rem 0.9rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: rgb(255 255 255 / 0.5);
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+  background: rgb(255 255 255 / 0.025);
+}
+.code-block pre {
+  margin: 0;
+  padding: 0.95rem 1rem 1.05rem;
+  overflow-x: auto;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: #e6e6f2;
+  tab-size: 2;
+}
+.code-block code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+}
+.hljs-comment,
+.hljs-quote {
+  color: #7b7f99;
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag,
+.hljs-meta .hljs-keyword {
+  color: #c4a8ff;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-meta .hljs-string {
+  color: #9fe0b8;
+}
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link {
+  color: #ffcf8f;
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-section {
+  color: #8fb4ff;
+}
+.hljs-type,
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title {
+  color: #7fd6e6;
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-property {
+  color: #f0b4d0;
+}
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #ff9ab0;
+}
+.hljs-deletion {
+  color: #ff8a8a;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 600;
+}
+
+/* A subtle film grain over the ambient background. */
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
 }
