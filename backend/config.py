@@ -38,6 +38,11 @@ class Settings(BaseSettings):
 
     model_name: str = "openai/gpt-oss-120b"
     max_history_tokens: int = 2000
+    # Upper bound on one chat reply. This is a safety ceiling, not a length
+    # target: reply length is governed by the response policy in
+    # core/personality.py. It is generous because reasoning models spend part
+    # of this budget on hidden reasoning before the visible answer.
+    max_response_tokens: int = int(os.getenv("MAX_RESPONSE_TOKENS", 4096))
 
     # Per-user daily caps. The Groq/Tavily API keys are one shared, server-side
     # account for the whole app — there's no way to give each user an

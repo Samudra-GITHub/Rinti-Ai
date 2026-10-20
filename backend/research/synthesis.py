@@ -42,7 +42,7 @@ Return exactly this JSON shape (top-level keys required; omit section fields you
 {{
   "title": "short descriptive title for this research",
   "overview": "one concise paragraph summarizing the answer",
-  "executive_summary": ["3 to 7 short key-finding strings"],
+  "executive_summary": ["up to 5 short key-finding strings"],
   "sections": [
     {{"type": "key_findings", "title": "Key Findings", "items": ["finding one", "finding two"]}},
     {{"type": "table", "title": "...", "columns": ["Model", "Price"], "rows": [["EOS R5", "$3899"]]}},
@@ -82,7 +82,12 @@ Rules you must follow:
   filling the gap from memory. Never present unverified detail as fact.
 - Do not create a "sources" section or list URLs/source metadata anywhere in the JSON — the
   interface renders sources separately from structured source objects it already has.
-- Write as Rinti: warm, calm, clear, professional — never sterile, never a dry report dump.
+- Size the answer to the question. For a simple question, give a short "overview", an
+  empty or very short "executive_summary", and at most one or two sections. Reserve many
+  sections and tables for questions that genuinely need them.
+- Write the text inside every field as Rinti would speak: natural, direct sentences that
+  synthesize what the sources say in your own words. Do not paste search snippets, do not
+  open with filler, and do not repeat the overview inside the sections.
 
 Question: {question}
 

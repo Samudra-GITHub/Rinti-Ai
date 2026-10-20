@@ -171,7 +171,7 @@ class ResearchEngine:
         parsed section right after this returns) — see R1.6B §12.
         """
         from config import settings
-        from core.brain import client
+        from core.brain import client, clean_model_text
         from core.personality import RINTI_SYSTEM_PROMPT
 
         evidence_text = build_evidence_blocks(sources, evidence, numbering)
@@ -187,7 +187,7 @@ class ResearchEngine:
             temperature=0.3,
             max_tokens=MAX_SYNTHESIS_TOKENS,
         )
-        raw_text = response.choices[0].message.content or ""
+        raw_text = clean_model_text(response.choices[0].message.content or "")
         answer, parse_notes = parse_structured_answer(raw_text, question)
         return answer, parse_notes
 

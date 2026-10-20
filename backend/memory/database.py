@@ -365,8 +365,9 @@ def conversation_owner(conversation_id: str) -> Optional[str]:
     conn.close()
     return row["user_id"] if row else None
 
-def save_message(conversation_id: str, role: str, content: str, research_session_id: Optional[str] = None):
-    """Appends a message to a conversation the caller has already verified ownership of."""
+def save_message(conversation_id: str, role: str, content: str, research_session_id: Optional[str] = None) -> str:
+    """Appends a message to a conversation the caller has already verified ownership of.
+    Returns the new message's id."""
     conn = get_connection()
     cursor = conn.cursor()
     msg_id = str(uuid.uuid4())
@@ -378,6 +379,15 @@ def save_message(conversation_id: str, role: str, content: str, research_session
         "UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE id = ?",
         (conversation_id,)
     )
+    conn.commit()
+    conn.close()
+    return msg_id
+
+def update_message_content(message_id: str, content: str) -> None:
+    """Replaces a message's text (used while an assistant reply is still streaming)."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE messages SET content = ? WHERE id = ?", (content, message_id))
     conn.commit()
     conn.close()
 
@@ -437,8 +447,12 @@ def delete_conversation(conversation_id: str, user_id: str) -> bool:
     conn.close()
     return True
 
-def get_conversation_history(conversation_id: str, user_id: str, limit: int = 20) -> List[Dict]:
-    """Returns [] both when the conversation doesn't exist and when it isn't
+def get_conversation_history(conversation_id: str, user_id: str, limit: Optional[int] = None) -> List[Dict]:
+    """Messages of an owned conversation, oldest first. With `limit`, returns the
+    most RECENT `limit` messages (still oldest first) — what the model needs as
+    context. Without it, returns the whole conversation (what the UI displays).
+
+    Returns [] both when the conversation doesn't exist and when it isn't
     owned by user_id — messages are only ever reachable through an owned
     conversation, and the two cases must look identical to the caller."""
     conn = get_connection()
@@ -449,12 +463,21 @@ def get_conversation_history(conversation_id: str, user_id: str, limit: int = 20
     if not cursor.fetchone():
         conn.close()
         return []
-    cursor.execute(
-        "SELECT id, role, content, timestamp, research_session_id FROM messages "
-        "WHERE conversation_id = ? ORDER BY timestamp ASC LIMIT ?",
-        (conversation_id, limit)
-    )
-    rows = cursor.fetchall()
+    # SQLite timestamps have one-second resolution, so messages saved in the same
+    # second need rowid as a tiebreaker to keep their true order. Postgres
+    # timestamps are microsecond-precise and have no rowid.
+    asc_tiebreak = "" if db_backend.IS_POSTGRES else ", rowid ASC"
+    desc_tiebreak = "" if db_backend.IS_POSTGRES else ", rowid DESC"
+    columns = "SELECT id, role, content, timestamp, research_session_id FROM messages WHERE conversation_id = ? "
+    if limit:
+        cursor.execute(
+            columns + f"ORDER BY timestamp DESC{desc_tiebreak} LIMIT ?",
+            (conversation_id, limit),
+        )
+        rows = list(reversed(cursor.fetchall()))
+    else:
+        cursor.execute(columns + f"ORDER BY timestamp ASC{asc_tiebreak}", (conversation_id,))
+        rows = cursor.fetchall()
     conn.close()
     return [
         {
@@ -466,6 +489,31 @@ def get_conversation_history(conversation_id: str, user_id: str, limit: int = 20
         }
         for row in rows
     ]
+
+def delete_last_assistant_message(conversation_id: str, user_id: str) -> bool:
+    """Removes the newest message of an owned conversation if it is an assistant
+    reply (used by "regenerate"). Returns False when there is nothing to remove."""
+    history = get_conversation_history(conversation_id, user_id, limit=1)
+    if not history or history[0]["role"] != "assistant":
+        return False
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM messages WHERE id = ?", (history[0]["id"],))
+    conn.commit()
+    conn.close()
+    return True
+
+def set_title_if_missing(conversation_id: str, user_id: str, title: str) -> None:
+    """Gives a still-untitled conversation a title (first user message). Never
+    overwrites a title the user already chose."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE conversations SET title = ? WHERE id = ? AND user_id = ? AND (title IS NULL OR title = '')",
+        (title, conversation_id, user_id),
+    )
+    conn.commit()
+    conn.close()
 
 # ── Settings Functions ──
 

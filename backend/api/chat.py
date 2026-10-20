@@ -16,6 +16,8 @@ class ChatRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
     model: Optional[str] = None
+    # Re-answer the conversation's last user message instead of sending a new one.
+    regenerate: bool = False
 
 class ChatResponse(BaseModel):
     conversation_id: str
@@ -80,7 +82,9 @@ async def chat_endpoint(request: ChatRequest, current_user: dict = Depends(get_c
     _check_chat_quota(current_user["id"])
     try:
         conv_id = _owned_conversation_id(request.conversation_id, current_user["id"])
-        reply = generate_response(request.message, conv_id, current_user["id"], model=request.model)
+        reply = generate_response(
+            request.message, conv_id, current_user["id"], model=request.model, regenerate=request.regenerate
+        )
 
         return ChatResponse(
             conversation_id=conv_id,
@@ -90,7 +94,9 @@ async def chat_endpoint(request: ChatRequest, current_user: dict = Depends(get_c
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log the type only; exception text can carry provider/internal detail.
+        print(f"[chat_endpoint error] {type(e).__name__}")
+        raise HTTPException(status_code=500, detail="Rinti is temporarily unavailable. Please try again.")
 
 async def _quota_exceeded_stream(message: str):
     yield f"event: error\ndata: {json.dumps({'code': 'daily_limit_reached', 'message': message})}\n\n"
@@ -114,7 +120,9 @@ async def chat_stream_endpoint(request: ChatRequest, current_user: dict = Depend
         )
 
     conv_id = _owned_conversation_id(request.conversation_id, current_user["id"])
-    generator = stream_response(request.message, conv_id, current_user["id"], model=request.model)
+    generator = stream_response(
+        request.message, conv_id, current_user["id"], model=request.model, regenerate=request.regenerate
+    )
 
     return StreamingResponse(
         generator,
@@ -148,7 +156,9 @@ async def list_conversations_endpoint(current_user: dict = Depends(get_current_u
     try:
         return db.list_conversations(current_user["id"])
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log the type only; exception text can carry provider/internal detail.
+        print(f"[chat_endpoint error] {type(e).__name__}")
+        raise HTTPException(status_code=500, detail="Could not load your conversations. Please try again.")
 
 @router.get("/conversations/{conversation_id}", response_model=List[MessageItem])
 async def get_conversation(conversation_id: str, current_user: dict = Depends(get_current_user)):
@@ -156,7 +166,9 @@ async def get_conversation(conversation_id: str, current_user: dict = Depends(ge
         history = db.get_conversation_history(conversation_id, current_user["id"])
         return history or []
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log the type only; exception text can carry provider/internal detail.
+        print(f"[chat_endpoint error] {type(e).__name__}")
+        raise HTTPException(status_code=500, detail="Could not load this conversation. Please try again.")
 
 @router.patch(
     "/conversations/{conversation_id}",
