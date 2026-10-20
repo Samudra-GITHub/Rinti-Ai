@@ -39,29 +39,16 @@ def _parse_db_timestamp(value) -> datetime:
 _UNAUTHENTICATED = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
 
-async def get_current_user(
-    request: Request,
-    session_cookie: str | None = Cookie(default=None, alias=SESSION_COOKIE_NAME),
-) -> dict:
-    if not session_cookie:
-        raise _UNAUTHENTICATED
+LOCAL_USER_EMAIL = "local@rinti.ai"
 
-    token_hash = hash_token(session_cookie)
-    session = db.get_session_by_token_hash(token_hash)
-    if session is None:
-        raise _UNAUTHENTICATED
-    if session["revoked_at"] is not None:
-        raise _UNAUTHENTICATED
-    if _parse_db_timestamp(session["expires_at"]) <= datetime.now(timezone.utc):
-        raise _UNAUTHENTICATED
 
-    user = db.get_user_by_id(session["user_id"])
-    if user is None or not user["is_active"]:
-        raise _UNAUTHENTICATED
-
-    db.touch_session(session["id"])
+async def get_current_user(request: Request) -> dict:
+    """Login is disabled: every request runs as one shared local user,
+    created on first use."""
+    user = db.get_user_by_email(LOCAL_USER_EMAIL)
+    if user is None:
+        user = db.create_user("Rinti User", LOCAL_USER_EMAIL, "!")
     request.state.user = user
-    request.state.session_token = session_cookie
     return user
 
 

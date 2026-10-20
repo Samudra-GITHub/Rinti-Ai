@@ -15,11 +15,9 @@ import {
   Pencil,
   Trash2,
   Check,
-  LogOut,
 } from "lucide-react";
 import { useActiveModel } from "@/hooks/useActiveModel";
 import { useConversations } from "@/hooks/useConversations";
-import { useAuth } from "@/hooks/useAuth";
 import { api, ApiError } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { RintiOrb } from "@/components/orb/RintiOrb";
@@ -60,8 +58,6 @@ export function ConversationSidebar({ isOpen, onClose }: ConversationSidebarProp
 
   const { activeModel, setActiveModel, availableModels } = useActiveModel();
   const { conversations, isLoading, error, refresh } = useConversations();
-  const { user, logout } = useAuth();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -114,16 +110,6 @@ export function ConversationSidebar({ isOpen, onClose }: ConversationSidebarProp
     setDeletingId(null);
     if (activeConversationId === id) {
       router.push("/chat");
-    }
-  }
-
-  async function handleLogout() {
-    if (isLoggingOut) return;
-    setIsLoggingOut(true);
-    try {
-      await logout();
-    } finally {
-      router.replace("/login");
     }
   }
 
@@ -354,28 +340,6 @@ export function ConversationSidebar({ isOpen, onClose }: ConversationSidebarProp
                 })}
               </div>
             </div>
-
-            {user && (
-              <div className="mt-4 flex items-center gap-2.5 border-t border-white/5 px-1 pt-4">
-                <div
-                  aria-hidden
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-400/30 to-cyan-400/30 text-xs font-medium text-white/90"
-                >
-                  {user.name.trim().charAt(0).toUpperCase() || "?"}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-white/85">{user.name}</p>
-                  <p className="truncate text-[11px] text-white/35">{user.email}</p>
-                </div>
-                <IconButton
-                  icon={LogOut}
-                  size="sm"
-                  aria-label="Log out"
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                />
-              </div>
-            )}
           </motion.aside>
         )}
       </AnimatePresence>

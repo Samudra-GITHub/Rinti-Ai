@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import { AlertCircle, ArrowUp, Sparkles, X } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
@@ -11,7 +10,6 @@ import { RintiOrb } from "@/components/orb/RintiOrb";
 import { IconButton } from "@/ui/IconButton";
 import { useActiveModel } from "@/hooks/useActiveModel";
 import { useConversations } from "@/hooks/useConversations";
-import { useAuth } from "@/hooks/useAuth";
 import { extractSseEvents } from "@/lib/sse";
 import { withCsrfHeader } from "@/lib/http";
 import {
@@ -50,10 +48,8 @@ export function ChatWindow({
   initialDraft = "",
   loadError = null,
 }: ChatWindowProps) {
-  const router = useRouter();
   const { activeModel } = useActiveModel();
   const { conversations, refresh: refreshConversations } = useConversations();
-  const { clearSession } = useAuth();
 
   // Prefer the live title from the shared conversations list (kept fresh by
   // ConversationsProvider) so a rename made in the sidebar shows up here
@@ -298,12 +294,6 @@ export function ChatWindow({
             setResearchStage(null);
           } else if (evt.event === "error") {
             receivedError = true;
-            const code = (payload as { code?: string }).code;
-            if (code === "unauthenticated") {
-              clearSession();
-              router.replace("/login");
-              return;
-            }
             setErrorMessage(payload.message ?? "Something went wrong. Please try again.");
           }
         }
