@@ -8,6 +8,7 @@ response the moment it is issued.
 """
 
 import hashlib
+import os
 import re
 import secrets
 from datetime import datetime, timedelta, timezone
@@ -27,7 +28,11 @@ SESSION_TTL_DAYS = 30
 # across localhost:3000 <-> 127.0.0.1:8000 is plain HTTP, so Secure cookies
 # would simply be refused by the browser — the flags below track environment
 # rather than being hardcoded, so the same code is correct in both.
-IS_PRODUCTION = settings.environment == "production"
+# Production is ENVIRONMENT=production, or Vercel's own VERCEL_ENV=production, which
+# Vercel sets itself on every Production deployment. Relying on a hand-set variable
+# alone left a live deployment issuing non-Secure cookies when it was never added.
+# Preview deployments (VERCEL_ENV=preview) and local development are unaffected.
+IS_PRODUCTION = settings.environment == "production" or os.getenv("VERCEL_ENV") == "production"
 SESSION_COOKIE_NAME = "__Host-rinti_session" if IS_PRODUCTION else "rinti_session"
 
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
