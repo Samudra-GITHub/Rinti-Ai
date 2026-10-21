@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight, Monitor, Moon, Sun } from "lucide-react";
 import { PageShell, SectionLabel } from "@/components/layout/PageShell";
 import { SettingsCard } from "@/components/settings/SettingsCard";
+import { InferenceSettings } from "@/components/settings/InferenceSettings";
 import { Segmented } from "@/ui/Segmented";
 import { Switch } from "@/ui/Switch";
 import { useTheme, } from "@/hooks/useTheme";
@@ -72,6 +73,8 @@ export default function SettingsPage() {
       >
         <Switch checked={reduceMotion} onCheckedChange={setReduceMotion} label="Reduce motion" />
       </SettingsCard>
+
+      <InferenceSettings />
 
       <SectionLabel>Conversations</SectionLabel>
       <SettingsCard title="Show message times" description="Display the time each message was sent.">

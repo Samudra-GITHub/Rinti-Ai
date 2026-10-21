@@ -36,6 +36,14 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
+    if db_backend.IS_POSTGRES:
+        # Several serverless instances can cold-start at once, and Postgres'
+        # CREATE TABLE IF NOT EXISTS is not race-free: the loser of a race on a
+        # brand-new table fails with a duplicate-key error. A transaction-level
+        # advisory lock makes concurrent initialisers take turns (and is released
+        # on commit/rollback, so it is also safe behind a transaction pooler).
+        cursor.execute("SELECT pg_advisory_xact_lock(7266301)")
+
     # 1. Conversations
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS conversations (
@@ -141,6 +149,14 @@ def init_db():
     ''')
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_token_hash ON sessions(token_hash)")
+
+    # Runtime-adjustable application config (inference mode, selected models).
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS app_config (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL
+        )
+    ''')
 
     # 7b. Per-user daily usage counters (chat messages / research queries).
     # One row per (user, UTC date) — the app-enforced fair-share limit that
@@ -489,6 +505,24 @@ def get_conversation_history(conversation_id: str, user_id: str, limit: Optional
         }
         for row in rows
     ]
+
+def get_app_config() -> Dict[str, str]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT key, value FROM app_config")
+    rows = cursor.fetchall()
+    conn.close()
+    return {row["key"]: row["value"] for row in rows}
+
+def set_app_config(key: str, value: Optional[str]) -> None:
+    """Stores one config value; None removes it (falling back to the environment default)."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM app_config WHERE key = ?", (key,))
+    if value is not None:
+        cursor.execute("INSERT INTO app_config (key, value) VALUES (?, ?)", (key, value))
+    conn.commit()
+    conn.close()
 
 def delete_last_assistant_message(conversation_id: str, user_id: str) -> bool:
     """Removes the newest message of an owned conversation if it is an assistant

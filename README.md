@@ -154,10 +154,19 @@ Variables are read from `backend/.env`. Never commit it.
 
 | Variable | Purpose | Default |
 | :-- | :-- | :-- |
-| `OPENAI_API_KEY` | Groq or OpenAI-compatible API key | none |
+| `RINTI_DEFAULT_PROVIDER` | `groq` (cloud) or `ollama` (local models) | `groq` |
+| `RINTI_CLOUD_FALLBACK` | Let the cloud answer if the local model fails, in Auto mode (`false` = the cloud is never used as a fallback). Changeable in Settings | `false` |
+| `RINTI_COMMERCIAL_USE` | Only suggest models whose licence permits commercial use (Apache-2.0, MIT) | `false` |
+| `RINTI_HARDWARE_CHECK` | Refuse, with an explanation, a local model that clearly can't fit this computer's memory | `true` |
+| `RINTI_OLLAMA_BASE_URL` | Where Ollama listens | `http://127.0.0.1:11434` |
+| `RINTI_DEFAULT_MODEL` | Everyday local model | `qwen2.5:7b` |
+| `RINTI_CODING_MODEL` | Optional separate local model for programming questions | the everyday model |
+| `RINTI_LOCAL_NUM_CTX` | Largest context window requested from Ollama; lowered automatically if this computer can't hold it | `8192` |
+| `RINTI_ADMIN_TOKEN` | Allows changing inference settings from outside this machine | unset |
+| `OPENAI_API_KEY` | Groq or OpenAI-compatible API key (optional for local-only use) | none |
 | `OPENAI_BASE_URL` | LLM endpoint | `https://api.groq.com/openai/v1` |
 | `TAVILY_API_KEY` | Required for research mode | none |
-| `ENVIRONMENT` | `production` makes `DATABASE_URL` mandatory at startup | `development` |
+| `ENVIRONMENT` | `production` makes `DATABASE_URL` mandatory at startup and turns on the `__Host-`/Secure session cookie. On Vercel (any environment, including Preview) `DATABASE_URL` is always mandatory, and Vercel's own `VERCEL_ENV=production` also turns the cookie policy on | `development` |
 | `DATABASE_URL` | Postgres connection string | unset, so SQLite is used |
 | `DB_PATH` | SQLite file when `DATABASE_URL` is unset | `rinti_memory.db` |
 | `ALLOWED_ORIGINS` | Comma-separated CORS allowlist | `http://localhost:3000,http://127.0.0.1:3000` |
@@ -170,10 +179,18 @@ Variables are read from `backend/.env`. Never commit it.
 
 `vercel.json` defines a `frontend` service (Next.js, `frontend/`) and a `backend` service (`main:app`, 60 s max duration) and routes `/api/*` to the backend. In production set `ENVIRONMENT=production` and `DATABASE_URL`, because Vercel Functions have no durable filesystem for SQLite. `backend/scripts/migrate_sqlite_to_postgres.py` migrates existing data.
 
+### Local models
+
+Rinti can answer from a model on your own computer through Ollama, with the cloud
+as an optional fallback. See [docs/LOCAL_INFERENCE.md](docs/LOCAL_INFERENCE.md)
+for setup, hardware-aware model suggestions, licences, the model comparison,
+routing rules and cost trade-offs, and
+`backend/scripts/benchmark.py` to measure models yourself.
+
 ## Limitations
 
 - Voice endpoints are not mounted, and text-to-speech returns empty audio.
-- No local `/api` proxy, and no automated tests.
+- Automated tests cover the backend inference layer (`cd backend && python -m pytest`); there are no frontend tests.
 - Screenshots cover only the sign-in and register screens, because everything else needs the backend.
 
 ## License

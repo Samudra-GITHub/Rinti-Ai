@@ -123,18 +123,18 @@ Question: {query}"""
 
 def _classify_with_model(query: str) -> Optional[IntentDecision]:
     try:
-        from config import settings
-        from core.brain import client
+        from core.inference import complete_sync
 
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        response = client.chat.completions.create(
-            model=settings.model_name,
-            messages=[{"role": "user", "content": _CLASSIFIER_PROMPT.format(today=today, query=query[:2000])}],
+        completion = complete_sync(
+            [{"role": "user", "content": _CLASSIFIER_PROMPT.format(today=today, query=query[:2000])}],
+            purpose="classify",
             temperature=0,
             max_tokens=160,
-            response_format={"type": "json_object"},
+            json_mode=True,
+            user_text=query,
         )
-        payload = json.loads(response.choices[0].message.content or "{}")
+        payload = json.loads(completion.text or "{}")
         raw_intent = str(payload.get("intent", "")).strip().upper()
         if raw_intent not in ResearchIntent.__members__:
             return None

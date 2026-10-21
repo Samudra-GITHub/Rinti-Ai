@@ -6,21 +6,36 @@ from memory import db_backend
 router = APIRouter()
 
 
-def _check_groq() -> dict:
-    """Lightweight reachability probe. Uses the models-list endpoint, which
-    is metadata-only and does not consume completion token quota — a real
-    chat/research call would burn from the same daily Groq TPD budget the
-    app itself depends on, which a diagnostics endpoint must never do."""
-    if not settings.openai_api_key:
-        return {"configured": False, "reachable": False}
-    try:
-        from openai import OpenAI
+def _check_inference() -> dict:
+    """Provider reachability. Cloud providers are only contacted when the current
+    mode allows cloud use, so strict local-only mode never touches them."""
+    from core.routing import load_config
+    from providers.registry import cloud_providers, providers
 
-        client = OpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url, timeout=5.0)
-        client.models.list()
-        return {"configured": True, "reachable": True}
-    except Exception as exc:  # noqa: BLE001 - health check must never raise
-        return {"configured": True, "reachable": False, "error": str(exc)[:200]}
+    cfg = load_config()
+    result = {"mode": cfg.mode}
+    if cfg.mode == "cloud":
+        # Cloud mode never uses Ollama, so don't probe it (and reveal nothing about it).
+        result["local"] = {"checked": False}
+    else:
+        local = providers()["ollama"].health()
+        result["local"] = {
+            "checked": True,
+            "reachable": local.reachable,
+            "default_model_ready": any(m.id == cfg.local_model for m in local.models),
+        }
+    cloud = cloud_providers().get(cfg.cloud_provider)
+    if cloud is not None:
+        if cfg.mode == "local":
+            result["cloud"] = {"configured": cloud.is_configured(), "checked": False}
+        else:
+            health = cloud.health() if cloud.is_configured() else None
+            result["cloud"] = {
+                "configured": cloud.is_configured(),
+                "checked": True,
+                "reachable": bool(health and health.reachable),
+            }
+    return result
 
 
 def _check_tavily() -> dict:
@@ -54,6 +69,6 @@ async def health_check():
         "environment": settings.environment,
         "database": db_status,
         "schema_initialized": _check_schema(),
-        "groq": _check_groq(),
+        "inference": _check_inference(),
         "tavily": _check_tavily(),
     }

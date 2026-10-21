@@ -6,6 +6,16 @@ import { Check, ChevronDown } from "lucide-react";
 import { useActiveModel } from "@/hooks/useActiveModel";
 import { cn } from "@/lib/cn";
 
+/** "auto" lets Rinti's router choose; everything else is a concrete model name. */
+function modelLabel(id: string): string {
+  return id === "auto" ? "Auto" : id;
+}
+
+function providerNote(id: string, provider: string): string {
+  if (id === "auto") return "Rinti picks the best model for each message";
+  return provider === "ollama" ? "Runs on this device" : `Cloud · ${provider}`;
+}
+
 export function ModelSelector() {
   const { activeModel, setActiveModel, availableModels, isLoading, error } = useActiveModel();
   const [open, setOpen] = useState(false);
@@ -52,7 +62,7 @@ export function ModelSelector() {
         className="flex h-9 max-w-full items-center gap-2 rounded-full border border-fg/10 bg-fg/[0.04] pl-3 pr-2.5 text-[0.8rem] text-fg/75 backdrop-blur transition-colors duration-150 hover:border-purple-400/30 hover:text-fg focus-ring"
       >
         <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--accent)/0.9)]" />
-        <span className="max-w-[12rem] truncate">{activeModel ?? "Select a model"}</span>
+        <span className="max-w-[12rem] truncate">{activeModel ? modelLabel(activeModel) : "Select a model"}</span>
         <ChevronDown size={14} className={cn("shrink-0 text-fg/40 transition-transform duration-200", open && "rotate-180")} />
       </button>
 
@@ -81,8 +91,8 @@ export function ModelSelector() {
                   )}
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate leading-tight">{m.id}</span>
-                    <span className="block text-[11px] text-fg/35">{m.provider}</span>
+                    <span className="block truncate leading-tight">{modelLabel(m.id)}</span>
+                    <span className="block text-[11px] text-fg/35">{providerNote(m.id, m.provider)}</span>
                   </span>
                   {m.id === activeModel && <Check size={14} className="shrink-0 text-purple-300" />}
                 </button>

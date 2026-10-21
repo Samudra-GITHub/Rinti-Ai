@@ -9,6 +9,8 @@ import memory.database as db
 from auth.dependencies import get_current_user, verify_csrf_header
 from config import settings
 from core.brain import generate_response, stream_response
+from core.routing import plan_route
+from providers.base import ProviderError
 
 router = APIRouter()
 
@@ -62,6 +64,16 @@ def _owned_conversation_id(requested_id: Optional[str], user_id: str) -> str:
     return requested_id
 
 
+def _status_for(exc: ProviderError) -> int:
+    return {
+        "policy_violation": 403,
+        "model_unavailable": 404,
+        "rate_limited": 429,
+        "provider_busy": 429,
+        "provider_timeout": 504,
+    }.get(exc.code, 503)
+
+
 def _check_chat_quota(user_id: str) -> None:
     usage = db.check_and_increment_usage(user_id, "chat", settings.max_chat_messages_per_day)
     if not usage["allowed"]:
@@ -79,7 +91,14 @@ def _check_chat_quota(user_id: str) -> None:
 async def chat_endpoint(request: ChatRequest, current_user: dict = Depends(get_current_user)):
     if not request.message.strip():
         raise HTTPException(status_code=400, detail="Message cannot be empty")
-    _check_chat_quota(current_user["id"])
+    try:
+        route = plan_route(request.message, request.model)
+    except ProviderError as exc:
+        raise HTTPException(status_code=_status_for(exc), detail=exc.user_message)
+    # The daily cap protects the shared cloud account; local inference costs no API quota.
+    # A planned cloud fallback counts too, or a failing local model would bypass the cap.
+    if route.primary.kind == "cloud" or route.fallback is not None:
+        _check_chat_quota(current_user["id"])
     try:
         conv_id = _owned_conversation_id(request.conversation_id, current_user["id"])
         reply = generate_response(
@@ -93,6 +112,8 @@ async def chat_endpoint(request: ChatRequest, current_user: dict = Depends(get_c
         )
     except HTTPException:
         raise
+    except ProviderError as exc:
+        raise HTTPException(status_code=_status_for(exc), detail=exc.user_message)
     except Exception as e:
         # Log the type only; exception text can carry provider/internal detail.
         print(f"[chat_endpoint error] {type(e).__name__}")
@@ -107,21 +128,29 @@ async def chat_stream_endpoint(request: ChatRequest, current_user: dict = Depend
     if not request.message.strip():
         raise HTTPException(status_code=400, detail="Message cannot be empty")
 
-    usage = db.check_and_increment_usage(current_user["id"], "chat", settings.max_chat_messages_per_day)
-    if not usage["allowed"]:
-        message = (
-            f"You've reached today's message limit ({usage['limit']} messages). "
-            "It resets at midnight UTC. This limit is per-account — it doesn't affect other users."
-        )
-        return StreamingResponse(
-            _quota_exceeded_stream(message),
-            media_type="text/event-stream",
-            headers={"Cache-Control": "no-cache"},
-        )
+    try:
+        route = plan_route(request.message, request.model)
+    except ProviderError as exc:
+        raise HTTPException(status_code=_status_for(exc), detail=exc.user_message)
+
+    # The daily cap protects the shared cloud account; local inference costs no API quota.
+    # A planned cloud fallback counts too, or a failing local model would bypass the cap.
+    if route.primary.kind == "cloud" or route.fallback is not None:
+        usage = db.check_and_increment_usage(current_user["id"], "chat", settings.max_chat_messages_per_day)
+        if not usage["allowed"]:
+            message = (
+                f"You've reached today's message limit ({usage['limit']} messages). "
+                "It resets at midnight UTC. This limit is per-account, so it doesn't affect other users."
+            )
+            return StreamingResponse(
+                _quota_exceeded_stream(message),
+                media_type="text/event-stream",
+                headers={"Cache-Control": "no-cache"},
+            )
 
     conv_id = _owned_conversation_id(request.conversation_id, current_user["id"])
     generator = stream_response(
-        request.message, conv_id, current_user["id"], model=request.model, regenerate=request.regenerate
+        request.message, conv_id, current_user["id"], route, regenerate=request.regenerate
     )
 
     return StreamingResponse(

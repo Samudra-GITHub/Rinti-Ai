@@ -49,13 +49,11 @@ def build_plan(query: str, decision: IntentDecision, mode: ResearchMode) -> Rese
     budget = BUDGETS[mode]
 
     try:
-        from config import settings
-        from core.brain import client
+        from core.inference import complete_sync
 
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        response = client.chat.completions.create(
-            model=settings.model_name,
-            messages=[{
+        completion = complete_sync(
+            [{
                 "role": "user",
                 "content": _PLANNER_PROMPT.format(
                     max_subqueries=budget.max_subqueries,
@@ -64,11 +62,13 @@ def build_plan(query: str, decision: IntentDecision, mode: ResearchMode) -> Rese
                     query=query[:2000],
                 ),
             }],
+            purpose="research_plan",
             temperature=0.1,
             max_tokens=500,
-            response_format={"type": "json_object"},
+            json_mode=True,
+            user_text=query,
         )
-        payload = json.loads(response.choices[0].message.content or "{}")
+        payload = json.loads(completion.text or "{}")
     except Exception:
         return _fallback_plan(query, decision, mode)
 
