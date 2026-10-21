@@ -468,3 +468,98 @@ def test_auto_without_fallback_refuses_an_explicitly_chosen_cloud_model(world):
         plan_route("hello", "cloud-model")
     world.state["cfg"] = type(cfg)(**{**cfg.__dict__, "local_model": "small-ok", "coding_model": "small-ok", "cloud_fallback": True})
     assert plan_route("hello", "cloud-model").primary.provider == "groq"
+
+
+# --- nothing derived from the server's hardware reaches anonymous callers of a hosted backend ---
+
+_LEAK_MARKERS = ("needed_gb", "moderate", "partial", "split between", "gpu_gb", "vram", "8192", "Install Phi", "5.4")
+
+
+def _rich_client(monkeypatch, hosted, admin_token=""):
+    """Like _client, but the fake overview carries every hardware-derived value."""
+    from fastapi import FastAPI
+    from fastapi.testclient import TestClient
+
+    from api import inference as api_inference
+    from auth.dependencies import get_current_user
+    from config import settings
+    from providers.base import ModelInfo, ProviderHealth
+
+    monkeypatch.setattr(settings, "admin_token", admin_token)
+    fit = {
+        "level": "no", "fits": False, "needed_gb": 5.4, "context": 8192, "speed": "moderate",
+        "reasons": ["split between GPU and CPU, needs 5.4 GB"],
+    }
+    candidate = {
+        "model": "phi4-mini", "label": "Phi", "download_gb": 2.5, "installed": False, "context": 8192,
+        "fit": {**fit, "level": "partial", "fits": True},
+        "license": {"id": "mit", "name": "MIT", "commercial": "yes"}, "tested": "t", "role": "r",
+    }
+    overview = {
+        "hardware": machine(24, 6).to_dict(),
+        "deployment": {"hosted": hosted, "serverless": hosted, "note": "n"},
+        "models": [{
+            "id": "m", "size_gb": 4.7, "fit": fit, "verified": True, "commercial_ok": True,
+            "license": {"id": "apache-2.0", "name": "Apache", "commercial": "yes", "source": "model file"},
+        }],
+        "recommendation": {"recommended": candidate, "candidates": [candidate], "summary": "Install Phi4", "commercial_only": False},
+        "commercial_only": False,
+    }
+
+    class Loaded(FakeProvider):
+        def health(self):
+            return ProviderHealth(
+                True, "ok", [ModelInfo("m", "ollama")],
+                [{"model": "m", "size_bytes": 5.4e9, "vram_bytes": 4.1e9, "context": 8192}],
+            )
+
+    monkeypatch.setattr(api_inference.local_fit, "overview", lambda: overview)
+    monkeypatch.setattr(
+        api_inference.local_fit, "suggest_alternatives",
+        lambda exclude="": [{"action": "install_model", "model": "phi4-mini", "text": "Install Phi-4 mini 3.8B"}],
+    )
+    monkeypatch.setattr(
+        api_inference.routing, "status_snapshot",
+        lambda: {"local_model": "m", "coding_model": "m", "mode": "local", "cloud_fallback": False},
+    )
+    monkeypatch.setattr(api_inference, "cloud_providers", lambda: {})
+    monkeypatch.setattr(api_inference, "providers", lambda: {"ollama": Loaded("ollama", "local", models=["m"])})
+    app = FastAPI()
+    app.include_router(api_inference.router, prefix="/api")
+    app.dependency_overrides[get_current_user] = lambda: {"id": "u"}
+    return TestClient(app)
+
+
+def test_hosted_backend_redacts_every_hardware_derived_field_for_visitors(monkeypatch):
+    import json
+
+    body = _rich_client(monkeypatch, hosted=True).get("/api/inference/status").json()
+    assert body["can_configure"] is False
+    assert body["hardware"] is None and body["recommendation"] is None
+    assert all(m["fit"] is None for m in body["local"]["models"])
+    assert body["local"]["loaded"] == []
+    assert body["assessment"]["alternatives"] == [] and body["assessment"]["notes"] == []
+    assert body["assessment"]["level"] in ("good", "unavailable")
+    leaked = [marker for marker in _LEAK_MARKERS if marker in json.dumps(body)]
+    assert leaked == [], f"hardware-derived values reached an anonymous caller: {leaked}"
+
+
+def test_hosted_backend_still_tells_visitors_whether_local_models_are_reachable(monkeypatch):
+    body = _rich_client(monkeypatch, hosted=True).get("/api/inference/status").json()
+    assert body["local"]["reachable"] is True and body["deployment"]["hosted"] is True
+
+
+def test_hosted_backend_shows_an_admin_everything(monkeypatch):
+    client = _rich_client(monkeypatch, hosted=True, admin_token="s3cret-token")
+    body = client.get("/api/inference/status", headers={"X-Rinti-Admin": "s3cret-token"}).json()
+    assert body["hardware"]["ram_total_gb"] == 24
+    assert body["recommendation"]["recommended"]["model"] == "phi4-mini"
+    assert body["local"]["models"][0]["fit"]["needed_gb"] == 5.4
+    assert body["local"]["loaded"][0]["gpu_gb"] == 4.1
+    assert body["assessment"]["level"] == "unsuitable" and body["assessment"]["alternatives"]
+
+
+def test_self_hosted_backend_is_unchanged(monkeypatch):
+    body = _rich_client(monkeypatch, hosted=False).get("/api/inference/status").json()
+    assert body["recommendation"] is not None and body["local"]["models"][0]["fit"] is not None
+    assert body["local"]["loaded"] and body["assessment"]["alternatives"]

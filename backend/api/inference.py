@@ -90,6 +90,18 @@ def _assessment(snapshot: Dict[str, Any], reachable: bool, overview: Dict[str, A
     return {"level": level, "problems": problems, "notes": notes, "alternatives": alternatives}
 
 
+def _public_assessment(assessment: Dict[str, Any]) -> Dict[str, Any]:
+    """What an anonymous caller of a hosted backend may see: whether local models are
+    reachable at all, never why they would or wouldn't fit (that describes the server)."""
+    reachable_only = assessment["level"] == "unavailable"
+    return {
+        "level": "unavailable" if reachable_only else "good",
+        "problems": assessment["problems"] if reachable_only else [],
+        "notes": [],
+        "alternatives": [],
+    }
+
+
 def _model_dict(m) -> Dict[str, Any]:
     return {
         "id": m.id,
@@ -119,16 +131,22 @@ async def inference_status(
 
     overview = local_fit.overview()
     # A public, hosted backend doesn't tell anonymous visitors what server it runs on.
+    # That covers everything derived from the hardware, not only the hardware itself:
+    # the model suggestion, per-model fit, the assessment's reasons and alternatives,
+    # and how much memory the loaded model uses would all reveal its capability.
     reveal_hardware = can_configure or not overview["deployment"]["hosted"]
+    assessment = _assessment(snapshot, health.reachable, overview)
+    if not reveal_hardware:
+        assessment = _public_assessment(assessment)
     return {
         **snapshot,
         "hardware": overview["hardware"] if reveal_hardware else None,
         "deployment": overview["deployment"],
-        "recommendation": overview["recommendation"],
+        "recommendation": overview["recommendation"] if reveal_hardware else None,
         "commercial_only": overview["commercial_only"],
-        "assessment": _assessment(snapshot, health.reachable, overview),
+        "assessment": assessment,
         "local": {
-            "models": overview["models"],
+            "models": overview["models"] if reveal_hardware else [{**m, "fit": None} for m in overview["models"]],
             "reachable": health.reachable,
             "detail": health.detail,
             "installed": [_model_dict(m) for m in health.models],
@@ -140,7 +158,9 @@ async def inference_status(
                     "context": item.get("context"),
                 }
                 for item in health.loaded
-            ],
+            ]
+            if reveal_hardware
+            else [],
             "general_ready": any(m.id == snapshot["local_model"] for m in health.models),
             "coding_ready": any(m.id == snapshot["coding_model"] for m in health.models),
         },

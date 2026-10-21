@@ -120,12 +120,13 @@ export interface InferenceStatusDto {
     notes: string[];
   } | null;
   deployment: { hosted: boolean; serverless: boolean; note: string };
+  /** null on a hosted backend, for clients that aren't allowed to configure it (it describes the server). */
   recommendation: {
     recommended: RecommendationCandidateDto | null;
     candidates: RecommendationCandidateDto[];
     summary: string;
     commercial_only: boolean;
-  };
+  } | null;
   commercial_only: boolean;
   assessment: { level: "good" | "slow" | "unsuitable" | "unavailable"; problems: string[]; notes: string[]; alternatives: AlternativeDto[] };
   local: {

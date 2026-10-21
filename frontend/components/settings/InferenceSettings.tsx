@@ -230,34 +230,38 @@ export function InferenceSettings() {
         </span>
       </SettingsCard>
 
-      <SettingsCard
-        title="Suggested model"
-        description={
-          recommendation.recommended
-            ? `${recommendation.summary} ${licenceNote(recommendation.recommended)}. ${recommendation.recommended.tested === "pending" ? "Not yet benchmarked in Rinti." : recommendation.recommended.tested}`
-            : recommendation.summary
-        }
-      >
-        <span className="text-[13px] text-fg/45">
-          {recommendation.recommended ? `${recommendation.recommended.download_gb} GB download` : ""}
-        </span>
-      </SettingsCard>
-      <details className="px-1 pb-2 text-[13px] text-fg/55">
-        <summary className="cursor-pointer select-none py-1 text-fg/70">How each verified model fits this computer</summary>
-        <ul className="mt-2 space-y-2">
-          {recommendation.candidates.map((c: RecommendationCandidateDto) => (
-            <li key={c.model}>
-              <span className="text-fg/80">{c.label}</span> ({c.download_gb} GB, {c.installed ? "installed" : "not installed"}):{" "}
-              {SPEED_LABEL[c.fit.speed] ?? c.fit.speed} with a {c.context.toLocaleString()} token window. {licenceNote(c)}.
-              {c.fit.reasons.length ? ` ${c.fit.reasons.join(" ")}` : ""}
-            </li>
-          ))}
-        </ul>
-        <p className="mt-2">
-          Memory figures are estimates, checked against measurements on one computer. Models you install yourself are listed
-          from their own licence text and are never suggested automatically.
-        </p>
-      </details>
+      {recommendation && (
+        <>
+          <SettingsCard
+            title="Suggested model"
+            description={
+              recommendation.recommended
+                ? `${recommendation.summary} ${licenceNote(recommendation.recommended)}. ${recommendation.recommended.tested === "pending" ? "Not yet benchmarked in Rinti." : recommendation.recommended.tested}`
+                : recommendation.summary
+            }
+          >
+            <span className="text-[13px] text-fg/45">
+              {recommendation.recommended ? `${recommendation.recommended.download_gb} GB download` : ""}
+            </span>
+          </SettingsCard>
+          <details className="px-1 pb-2 text-[13px] text-fg/55">
+            <summary className="cursor-pointer select-none py-1 text-fg/70">How each verified model fits this computer</summary>
+            <ul className="mt-2 space-y-2">
+              {recommendation.candidates.map((c: RecommendationCandidateDto) => (
+                <li key={c.model}>
+                  <span className="text-fg/80">{c.label}</span> ({c.download_gb} GB, {c.installed ? "installed" : "not installed"}):{" "}
+                  {SPEED_LABEL[c.fit.speed] ?? c.fit.speed} with a {c.context.toLocaleString()} token window. {licenceNote(c)}.
+                  {c.fit.reasons.length ? ` ${c.fit.reasons.join(" ")}` : ""}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2">
+              Memory figures are estimates, checked against measurements on one computer. Models you install yourself are listed
+              from their own licence text and are never suggested automatically.
+            </p>
+          </details>
+        </>
+      )}
 
       {status.mode !== "cloud" && (
         <>
