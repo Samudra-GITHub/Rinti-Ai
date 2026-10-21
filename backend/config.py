@@ -22,18 +22,22 @@ class Settings(BaseSettings):
 
     def __init__(self, **data):
         super().__init__(**data)
-        # Catch configuration errors early. In production (Vercel), DATABASE_URL
-        # must be set — otherwise every request gets an ephemeral filesystem with
-        # no database, and all writes fail. Local dev with DATABASE_URL also unset
-        # is fine (uses SQLite). But if environment signals "production" with no
-        # DATABASE_URL, that's a config error that should fail loudly at startup,
-        # not silently with cryptic 500s on every request.
-        if self.environment == "production" and not self.database_url:
+        # Catch configuration errors early. In production, and on any Vercel
+        # deployment (Production OR Preview: Vercel sets VERCEL for both),
+        # DATABASE_URL must be set. Vercel Functions have a read-only filesystem
+        # with nothing durable, so the SQLite fallback would either fail with a
+        # cryptic "unable to open database file" or silently lose data. Fail
+        # loudly at startup instead. Ordinary local development (neither
+        # ENVIRONMENT=production nor VERCEL) keeps the SQLite fallback.
+        on_vercel = bool(os.getenv("VERCEL"))
+        if (self.environment == "production" or on_vercel) and not self.database_url:
+            where = "environment=production" if self.environment == "production" else "this is a Vercel deployment"
             raise RuntimeError(
-                "FATAL: environment=production but DATABASE_URL is not set. "
-                "Vercel Functions have no durable filesystem — SQLite cannot be used for "
-                "production. Set DATABASE_URL to a Postgres connection string "
-                "(from Neon or another Marketplace provider)."
+                f"FATAL: {where} but DATABASE_URL is not set. "
+                "Vercel Functions have no durable filesystem, so SQLite cannot be used. "
+                "Set DATABASE_URL to a Postgres connection string (from Neon or another "
+                "Marketplace provider) for this Vercel environment. A Preview deployment needs "
+                "its own database, not the production one."
             )
 
     model_name: str = "openai/gpt-oss-120b"

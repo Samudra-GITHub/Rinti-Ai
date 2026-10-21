@@ -166,7 +166,7 @@ Variables are read from `backend/.env`. Never commit it.
 | `OPENAI_API_KEY` | Groq or OpenAI-compatible API key (optional for local-only use) | none |
 | `OPENAI_BASE_URL` | LLM endpoint | `https://api.groq.com/openai/v1` |
 | `TAVILY_API_KEY` | Required for research mode | none |
-| `ENVIRONMENT` | `production` makes `DATABASE_URL` mandatory at startup | `development` |
+| `ENVIRONMENT` | `production` makes `DATABASE_URL` mandatory at startup. On Vercel (any environment, including Preview) `DATABASE_URL` is always mandatory | `development` |
 | `DATABASE_URL` | Postgres connection string | unset, so SQLite is used |
 | `DB_PATH` | SQLite file when `DATABASE_URL` is unset | `rinti_memory.db` |
 | `ALLOWED_ORIGINS` | Comma-separated CORS allowlist | `http://localhost:3000,http://127.0.0.1:3000` |

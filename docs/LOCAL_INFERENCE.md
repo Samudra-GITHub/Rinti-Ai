@@ -380,10 +380,11 @@ The optional path to improve the local model further is in
   Production, Preview and/or Development, and a variable added with all three
   ticked is shared. If `DATABASE_URL` is set for Preview with the production
   connection string, Preview deployments read and write production data. Give
-  Preview its own database (for example a Neon branch). Leaving `DATABASE_URL`
-  unset for Preview would not fall back to production, but the backend would then
-  try to use a SQLite file on Vercel's read-only filesystem and most likely fail
-  to start (not verified). The repository cannot show which is configured.
+  Preview its own database (for example a Neon branch). The repository cannot
+  show which is configured. If Preview has no `DATABASE_URL` at all, the backend
+  refuses to start with a clear message (any Vercel deployment requires it, and
+  there is no SQLite fallback there), so a missing variable can never fall back to
+  production data or to a silently ephemeral database.
 
 ## Not tested (do not assume)
 
