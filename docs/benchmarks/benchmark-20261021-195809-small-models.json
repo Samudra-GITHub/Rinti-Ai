@@ -1,0 +1,2794 @@
+[
+ {
+  "case": "factual",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata is an ancient Indian epic poem that is considered one of the longest literary works in the world. It was composed in Sanskrit and is attributed to the sage Vyasa. The Mahabharata is not only a narrative of the Kurukshetra War but also contains a diverse range of Sanskrit literature including theology, philosophy, mythology, governance, and economics. The epic centers around the Kurukshetra War, a conflict between two groups of cousins, the Pandavas and the Kauravas, for control over the kingdom of Hastinapura. The Mahabharata also includes the Bhagavad Gita, a 700-verse Hindu scripture that is part of the epic, which is a conversation between Prince Arjuna and Krishna, who serves as his charioteer. The Mahabharata provides a detailed account of various aspects of Hindu culture, philosophy, and spirituality.",
+  "ttft": 0.63,
+  "total": 3.68,
+  "tokens": 179,
+  "tokens_per_s": 58.7,
+  "dropped_messages": 0,
+  "style": {
+   "words": 131,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "mentions the Pandavas/Kauravas or Kurukshetra",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions Sanskrit epic / ancient India",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "concise (<= 170 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "at most 2 bold phrases",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "factual",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata is an ancient Indian epic poem that is considered one of the greatest literary works of Indian culture. It is traditionally attributed to the sage Vyasa and is believed to have been composed over several centuries, with the earliest form dating back to around the 4th or 5th century BCE. The epic is written in Sanskrit and contains around 100,000 verses.\n\nThe Mahabharata narrates the story of the Kurukshetra War, which was fought between two groups of cousins, the Pandavas and the Kauravas, over the rights to rule the kingdom of Hastinapura. The epic also explores themes of duty, righteousness, politics, and the moral dilemmas faced by individuals. It is not only a tale of war but also a repository of ancient Indian philosophy, religion, and culture, including the Bhagavad Gita, which is a 700-verse section of the Mahabharata that presents a conversation between prince Arjuna and Krishna, who serves as his charioteer and guide.",
+  "ttft": 0.1,
+  "total": 3.67,
+  "tokens": 209,
+  "tokens_per_s": 58.6,
+  "dropped_messages": 0,
+  "style": {
+   "words": 157,
+   "paragraphs": 2,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "mentions the Pandavas/Kauravas or Kurukshetra",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions Sanskrit epic / ancient India",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "concise (<= 170 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "at most 2 bold phrases",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "detailed",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata, one of the longest epic poems of ancient India, is not just a story of a family feud but a philosophical treatise that explores various dimensions of human life and existence. It delves into themes such as Dharma (duty/righteousness), Karma (action and consequence), Samsara (the cycle of birth, death, and rebirth), Moksha (liberation), and the nature of reality. Here are some major philosophical themes explored in the Mahabharata:\n\n1. Dharma and Adharma: The concept of Dharma, or righteousness, is central to the Mahabharata. It is portrayed as a complex, multifaceted concept that varies depending on one's role in society (varnashramadharma) and situation (Purushartha). Yudhishthira, the protagonist, often struggles with his Dharma, especially in the face of adversity. The epic suggests that adhering to one's Dharma, even in difficult circumstances, is essential for maintaining cosmic order and achieving one's goals.\n\n2. Karma and Samsara: The theme of Karma, which refers to the law of cause and effect, is also significant in the Mahabharata. It teaches that our actions in this life determine our fate in future lives, thus driving the cycle of Samsara (rebirth). The epic emphasizes the importance of performing one's duty (Svadharma) without attachment to the results, as this is the path to achieving liberation (Moksha).\n\n3. Samsara and Moksha: The Mahabharata explores the concept of Samsara, the endless cycle of birth and rebirth, and Moksha, the ultimate goal of liberation from this cycle. It suggests that while most people are caught in the wheel of Samsara, there is a path to Moksha through righteous living and spiritual enlightenment. The epic also discusses different paths to Moksha, including knowledge (Jnana), devotion (Bhakti), and disciplined action (Karma Yoga).\n\n4. The Nature of Reality: The Mahabharata explores various philosophical perspectives on the nature of reality, including dualism (the belief in two fundamental realities, the physical and the spiritual), monism (the belief in one ultimate reality), and non-dualism (the belief that the individual self and ultimate reality are one and the same). These perspectives are explored through various philosophical discourses and debates among characters in the epic.\n\n5. Ethics and Morality: The Mahabharata also explores various ethical and moral dilemmas, such as the nature of good and evil, the importance of honesty and integrity, and the concept of duty. It suggests that while personal gain may be tempting, adhering to one's Dharma and moral principles is ultimately more rewarding.\n\n6. The Role of Destiny: The epic explores the role of destiny and free will in human life. It suggests that while destiny may set the path for an individual, personal choices and actions also play a significant role in determining one's fate. The concept of Nishkama Karma, or action without desire for the fruits of action, is promoted as a way of living in harmony with destiny.\n\n7. The Nature of Existence: The Mahabharata also explores philosophical questions related to the nature of existence, including the nature of the self, consciousness, and the universe. It suggests that the self is not merely an illusion but a manifestation of a larger, universal consciousness.\n\n8. The Concept of Time: The Mahabharata portrays time as cyclical, with events repeating themselves in an endless cycle. It also suggests that the past, present, and future are interconnected, and that one's actions in the present can affect the future.\n\nIn conclusion, the Mahabharata is a rich philosophical text that explores various dimensions of human life and existence. Its major themes, such as Dharma, Karma, Samsara, Moksha, and the nature of reality, provide profound insights into the human condition and the pursuit of a meaningful life.",
+  "ttft": 0.1,
+  "total": 13.76,
+  "tokens": 789,
+  "tokens_per_s": 57.8,
+  "dropped_messages": 0,
+  "style": {
+   "words": 599,
+   "paragraphs": 10,
+   "headings": 0,
+   "bullets": 8,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "covers dharma",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "covers karma or detachment",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "detailed (>= 250 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "not wall of bullets (bullets <= 12)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "detailed",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata, one of the two major Sanskrit epics of ancient India, is a vast narrative that contains a wide range of philosophical ideas and themes. Here are some of the major philosophical themes explored in the Mahabharata:\n\n1. Dharma (Duty/Righteousness): One of the central themes of the Mahabharata is the concept of Dharma, which refers to duty, morality, ethics, and righteousness. The epic portrays various characters facing dilemmas about what is morally right and what their responsibilities are as individuals and as members of society. The concept of Dharma is complex and multifaceted, with different characters interpreting it in different ways.\n\n2. Karma (Action and Consequence): The Mahabharata emphasizes the importance of Karma, which refers to the law of cause and effect, stating that one's actions determine one's future. Characters in the epic face the consequences of their actions, good or bad, throughout their lives. This theme highlights the idea that individuals have control over their destiny through their choices and actions.\n\n3. Samsara (Rebirth): The concept of Samsara, or rebirth, is another significant theme in the Mahabharata. The idea that one's actions in this life determine their fate in the next life is a recurring theme in the epic. This belief encourages individuals to live a life of righteousness and moral integrity to achieve a better rebirth or ultimate liberation (Moksha).\n\n4. Moksha (Liberation/Spiritual Freedom): The Mahabharata discusses the concept of Moksha, which refers to liberation from the cycle of birth and death (Samsara) and attaining spiritual freedom. The epic presents different paths to achieve Moksha, such as following one's Dharma, performing good deeds, and developing wisdom and knowledge.\n\n5. Bhakti (Devotion): The Mahabharata also explores the theme of Bhakti, or devotion to a higher power or deity. It presents various ways to achieve spiritual liberation through devotion and surrender to a higher power.\n\n6. Ahamkara (Egoism): The epic also delves into the concept of Ahamkara, or egoism, which refers to the individual's sense of self-importance and the desire for personal gain. The Mahabharata warns against the dangers of egoism and emphasizes the importance of humility, selflessness, and service to others.\n\n7. Artha (Material Success): Another theme in the Mahabharata is Artha, which refers to material success, prosperity, and the pursuit of worldly goals. The epic acknowledges the importance of achieving worldly success but also stresses that it should not be the sole focus of one's life. It advocates for a balanced approach to material success and spiritual enlightenment.\n\n8. Moksha vs. Artha: The Mahabharata presents a debate between two of its characters, Bhishma and Yudhishthira, on the importance of Moksha (spiritual liberation) versus Artha (material success). Bhishma argues that spiritual liberation is the ultimate goal, while Yudhishthira advocates for a balance between the two.\n\n9. The Wheel of Life: The Mahabharata presents the idea of the Wheel of Life, which consists of different realms of existence that individuals can be reborn into based on their actions. It also introduces the concept of Naraka (hell) and Deva (heaven) as intermediate realms.\n\n10. The concept of Maya: The Mahabharata also explores the concept of Maya, which refers to the illusory nature of the world. It suggests that the world we perceive is merely an illusion and that true reality lies in the spiritual realm. The epic encourages individuals to look beyond this illusion to attain spiritual enlightenment.\n\nThese philosophical themes continue to be relevant in Indian culture and philosophy, making the Mahabharata a timeless and profound epic that continues to inspire and guide individuals in their spiritual and moral journeys.",
+  "ttft": 0.1,
+  "total": 13.6,
+  "tokens": 778,
+  "tokens_per_s": 57.6,
+  "dropped_messages": 0,
+  "style": {
+   "words": 591,
+   "paragraphs": 12,
+   "headings": 0,
+   "bullets": 10,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "covers dharma",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "covers karma or detachment",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "detailed (>= 250 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "not wall of bullets (bullets <= 12)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "arithmetic",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The product of 17 multiplied by 24 is 408.",
+  "ttft": 0.1,
+  "total": 0.32,
+  "tokens": 14,
+  "tokens_per_s": 63.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 9,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "answer is 408",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "direct (<= 25 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings or table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "arithmetic",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The result of multiplying 17 by 24 is 408.",
+  "ttft": 0.1,
+  "total": 0.32,
+  "tokens": 14,
+  "tokens_per_s": 62.8,
+  "dropped_messages": 0,
+  "style": {
+   "words": 9,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "answer is 408",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "direct (<= 25 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings or table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "reasoning",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The total cost of 3 notebooks at $4.50 each is $13.50. If you pay with a $20 bill, you will receive $6.50 in change.",
+  "ttft": 0.11,
+  "total": 0.76,
+  "tokens": 39,
+  "tokens_per_s": 59.9,
+  "dropped_messages": 0,
+  "style": {
+   "words": 24,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "change is $6.50",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "reasoning",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "You spend 3 notebooks x $4.50/notebook = $13.50 in total. After paying with a $20 bill, your change is $20 - $13.50 = $6.50.",
+  "ttft": 0.09,
+  "total": 0.84,
+  "tokens": 45,
+  "tokens_per_s": 60.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 24,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "change is $6.50",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "conversational",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "I'm sorry to hear that you're feeling this way. Sometimes our tasks can pile up and create a feeling of being swamped. Would you like to take a moment to talk about what specifically is making you feel this way, or perhaps we can brainstorm some strategies to help manage your workload? Remember, it's important to take breaks and give yourself permission to rest. We can tackle this together.",
+  "ttft": 0.1,
+  "total": 1.41,
+  "tokens": 78,
+  "tokens_per_s": 59.6,
+  "dropped_messages": 0,
+  "style": {
+   "words": 69,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "short, human reply (<= 120 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no bullet list",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "responds to the feeling",
+    "passed": false
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "conversational",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "I'm sorry to hear that you're feeling this way. It's completely normal to have days when things seem a bit too much. Would you like to take a short break to breathe and reset, or would you prefer to talk about what's been causing you stress at work? Sometimes, just sharing can help lighten the load a bit.",
+  "ttft": 0.1,
+  "total": 1.19,
+  "tokens": 65,
+  "tokens_per_s": 59.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 58,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "short, human reply (<= 120 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no bullet list",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "responds to the feeling",
+    "passed": false
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "table",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Certainly! Below is a comparison table between the Pandavas and the Kauravas, two prominent groups from the Indian epic Mahabharata:\n\n| Aspect        | Pandavas (Kunti's Children)                                                                 | Kauravas (Krishna's Children)                                                                 |\n|----------------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|\n| Number        | Five brothers (Yudhisthira, Bhima, Arjuna, Nakula, Sahadeva)                                 | Five brothers (Draupadi's sons) (Dushasana, Vikarna, Dushasana, Karna, and others) |\n| Father        | King Pandu (in some versions, King Dasaratha)                                     | Vichitravirya                                      |\n| Mother        | Kunti and Madri (or Queen Kunti)                                              | Ambika and Dhritarashtra (or Ambalika and Kripa)                   |\n| Birth Order    | Yudhisthira (oldest), Bhima, Arjuna, Nakula, Sahadeva (youngest)                          | Dushasana, Vikarna, Dushasana, Karna (youngest)                  |\n| Marriages      | Draupadi (common wife to all five Pandavas)                                    | Draupadi (common wife to only Dushasana)                   |\n| Notable Incidents | Won the dice game (leading to exile)                                      | Betrayed Draupadi in the dice game                      |\n| Role in Mahabharata | Chose to fight against the Kauravas in Kurukshetra War                       | Led the Kaurava faction in the Kurukshetra War                |\n| Allies        | Krishna, Dronacharya, Balarama, Karna, many others                                 | Ashvatthama, Kripa, Karna (some allies)                   |\n| Moral Qualities | Righteousness, honor, and adherence to Dharma                              | Ambition, desire for power, and moral ambiguity          |\n| Deeds         | Defeated in battle due to the influence of Karna and Ashvatthama, but ultimately victorious | Defeated in battle, but considered to have been treacherous and deceitful |\n| Fate         | Rescued by Krishna before the battle of Kurukshetra, then lived in peace after victory | Killed in the battle of Kurukshetra                    |\n\nPlease note that the Mahabharata includes many complex characters and events, and this table simplifies some aspects for clarity. The Pandavas are often depicted as the upholders of Dharma (righteousness), while the Kauravas are typically portrayed as the antagonists with questionable morals. The table also highlights the difference in the number of sons, as Draupadi is married to all five Pandavas, whereas she is only married to Dushasana among the Kauravas. Karna, who is a key figure among the Kauravas, is also a unique character with his own set of complex loyalties and moral dilemmas.",
+  "ttft": 0.12,
+  "total": 10.56,
+  "tokens": 608,
+  "tokens_per_s": 58.2,
+  "dropped_messages": 0,
+  "style": {
+   "words": 349,
+   "paragraphs": 3,
+   "headings": 0,
+   "bullets": 0,
+   "table": true,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "contains a table",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions both groups",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "table has at least 3 rows",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "table",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "| Aspect             | Pandavas                                                                 | Kauravas                                                                 |\n|--------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------|\n| Number of Members   | Five brothers: Yudhishthira, Bhima, Arjuna, Nakula, Sahadeva.                                    | Five brothers: Duryodhana, Dushasana, Vikarna, Kripa, Ashvatthama.                    |\n| Key Characteristics | Virtuous, brave, and just.                                                    | Ambitious, deceitful, and power-hungry.                                  |\n| Role in Mahabharata | Good characters who fight for their rightful kingdom and to protect their family and dharma.       | Evil characters who seek to kill the Pandavas and take over the kingdom.        |\n| Notable Events     | They undergo many trials, including exile and the Kurukshetra War.                         | They plot to kill the Pandavas, including Draupadi, and later fight in Kurukshetra War.|\n| Deaths             | All five brothers die in the Kurukshetra War fighting for justice.                           | All five brothers die in the Kurukshetra War fighting for injustice.            |\n| Fate               | They are ultimately victorious and return to Hastinapur.                              | They are defeated and killed.                                         |\n| Relationship with Krishna | Supported and guided by Krishna.                                    | At odds with Krishna and his counsel, Arjuna.                             |\n| Popularity in Culture | Widely revered as heroes and role models.                                    | Often portrayed as antagonists and villains in the story.                |",
+  "ttft": 0.1,
+  "total": 5.51,
+  "tokens": 316,
+  "tokens_per_s": 58.4,
+  "dropped_messages": 0,
+  "style": {
+   "words": 195,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": true,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "contains a table",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions both groups",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "table has at least 3 rows",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "followup",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Before the war, Arjuna was deeply troubled and uncertain about fighting in the battle, primarily because he was concerned about killing his own relatives, friends, and revered teachers who were on the opposing side, as well as the destruction it would cause.",
+  "ttft": 0.12,
+  "total": 0.96,
+  "tokens": 50,
+  "tokens_per_s": 59.9,
+  "dropped_messages": 0,
+  "style": {
+   "words": 42,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "resolves 'his' to Arjuna's doubt about fighting kin/teachers",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "ties it to duty/dharma or the Gita",
+    "passed": false
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "followup",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Arjuna's main doubt before the war was about his duty as a warrior to fight against his own relatives, friends, and revered teachers, which created a moral dilemma and a deep sense of despair about the impending battle. He questioned the righteousness of fighting in the war and the consequences of his actions on his soul.",
+  "ttft": 0.1,
+  "total": 1.18,
+  "tokens": 64,
+  "tokens_per_s": 59.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 56,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "resolves 'his' to Arjuna's doubt about fighting kin/teachers",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "ties it to duty/dharma or the Gita",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "code",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Certainly! Here's a Python function that removes duplicates from a list while maintaining the original order:\n\n```python\ndef remove_duplicates(original_list):\n    unique_list = []\n    for item in original_list:\n        if item not in unique_list:\n            unique_list.append(item)\n    return unique_list\n\n# Example usage:\nmy_list = [1, 2, 2, 3, 1, 4, 3, 5]\nprint(remove_duplicates(my_list))  # Output: [1, 2, 3, 4, 5]\n```\n\nThis function iterates over each element in the original list, and if the element is not already in the unique list, it appends it to the unique list. As a result, the unique list will contain only the first occurrence of each element, thus removing duplicates while preserving the original order.",
+  "ttft": 0.09,
+  "total": 3.07,
+  "tokens": 176,
+  "tokens_per_s": 59.1,
+  "dropped_messages": 0,
+  "style": {
+   "words": 107,
+   "paragraphs": 4,
+   "headings": 1,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns a fenced code block",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "generated function runs and is correct",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "code",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Certainly! Here is a Python function that removes duplicates from a list while maintaining the original order:\n\n```python\ndef remove_duplicates(input_list):\n    unique_list = []\n    for item in input_list:\n        if item not in unique_list:\n            unique_list.append(item)\n    return unique_list\n\n# Example usage:\nmy_list = [1, 2, 3, 2, 1, 4, 5, 1, 3, 4, 5]\nprint(remove_duplicates(my_list))\n```\n\nThis function iterates through each item in the input list and appends it to a new list called `unique_list` if it is not already present, thus removing any duplicates and preserving the order of the original list.",
+  "ttft": 0.11,
+  "total": 2.69,
+  "tokens": 152,
+  "tokens_per_s": 58.8,
+  "dropped_messages": 0,
+  "style": {
+   "words": 90,
+   "paragraphs": 4,
+   "headings": 1,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns a fenced code block",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "generated function runs and is correct",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "debug",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The given code will not work as intended because it modifies the list `nums` while iterating over it, which results in skipping elements. To achieve the desired outcome of removing all even numbers without skipping any, you can use a different approach. One way to do this is by creating a new list that only contains the odd numbers:\n\n```python\nnums = [1, 2, 4, 3]\nnums = [n for n in nums if n % 2 != 0]\nprint(nums)\n```\n\nAnother way is to iterate over the list using indices and swap even numbers with the last element, then pop the last element, and continue this process:\n\n```python\nnums = [1, 2, 4, 3]\nfor i in range(len(nums) - 1, 0, -1):\n    if nums[i] % 2 == 0:\n        nums[i], nums[-1] = nums[-1], nums[i]\n        nums.pop()\nprint(nums)\n```\n\nBoth of these solutions will give you the expected result without skipping any elements.",
+  "ttft": 0.12,
+  "total": 3.94,
+  "tokens": 223,
+  "tokens_per_s": 58.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 151,
+   "paragraphs": 5,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "identifies mutating a list while iterating",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "explains skipped elements/indexes",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "offers a fix in a code block",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "debug",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "The provided Python code snippet contains a logical error that leads to the skipping of elements when removing even numbers from the list `nums`. The problem arises because the `remove` method modifies the list while iterating over it, which can cause unexpected behavior and result in skipping elements. A better approach is to iterate over a static list of indices or to create a new list to hold the results. Here's a corrected version of the code that successfully removes even numbers without skipping any elements:\n\n```python\nnums = [1, 2, 4, 3]\nnums = [n for n in nums if n % 2 != 0]\nprint(nums)\n```\n\nIn this corrected version, we use a list comprehension to create a new list that only includes the odd numbers from `nums`. The resulting list `nums` is then printed, which will output `[1, 3]` without skipping any elements.",
+  "ttft": 0.09,
+  "total": 3.25,
+  "tokens": 185,
+  "tokens_per_s": 58.6,
+  "dropped_messages": 0,
+  "style": {
+   "words": 146,
+   "paragraphs": 3,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "identifies mutating a list while iterating",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "explains skipped elements/indexes",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "offers a fix in a code block",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "long",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Your favourite number is 73.",
+  "ttft": 0.83,
+  "total": 0.96,
+  "tokens": 8,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 5,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "recalls the number 73 from the start of a long chat",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "short answer (<= 40 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "long",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Your favourite number is 73.",
+  "ttft": 0.17,
+  "total": 0.3,
+  "tokens": 8,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 5,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "recalls the number 73 from the start of a long chat",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "short answer (<= 40 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "unknown_fact",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "I don't have information on your pet. Could you tell me the name of your pet?",
+  "ttft": 0.37,
+  "total": 0.68,
+  "tokens": 19,
+  "tokens_per_s": 60.9,
+  "dropped_messages": 0,
+  "style": {
+   "words": 16,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "admits it does not know instead of inventing a name",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 50 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "unknown_fact",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "I'm sorry, but I don't have information on your pet's name. Could you tell me your pet's name?",
+  "ttft": 0.1,
+  "total": 0.49,
+  "tokens": 24,
+  "tokens_per_s": 61.7,
+  "dropped_messages": 0,
+  "style": {
+   "words": 18,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "admits it does not know instead of inventing a name",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 50 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "ambiguous",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "Of course, I can help with that. Could you please provide more details about the fix you need? What specifically do you need me to correct or change?",
+  "ttft": 0.11,
+  "total": 0.66,
+  "tokens": 33,
+  "tokens_per_s": 59.9,
+  "dropped_messages": 0,
+  "style": {
+   "words": 28,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "asks for the missing information",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "does not invent code or a fix",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 60 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "ambiguous",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "To effectively address your request, I need a bit more specific information about what you need to be \"fixed.\" Could you please provide more context or details about the issue you're encountering? This will help me to assist you better.",
+  "ttft": 0.08,
+  "total": 0.85,
+  "tokens": 46,
+  "tokens_per_s": 60.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 40,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "asks for the missing information",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "does not invent code or a fix",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 60 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "research_intent",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"intent\": \"CURRENT_INFORMATION\",\n  \"requires_freshness\": true,\n  \"reason\": \"Involves the most recent advancements in battery technology\"\n}",
+  "ttft": 0.23,
+  "total": 0.84,
+  "tokens": 36,
+  "tokens_per_s": 59.1,
+  "dropped_messages": 0,
+  "style": {
+   "words": 15,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns valid JSON with a known intent",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "recognises a 'latest developments' question needs research",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "research_intent",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"intent\": \"CURRENT_INFORMATION\",\n  \"requires_freshness\": true,\n  \"reason\": \"The latest developments in solid-state batteries as of 2023 are not available; this information is needed as of 2026.\"\n}",
+  "ttft": 0.17,
+  "total": 1.03,
+  "tokens": 51,
+  "tokens_per_s": 59.3,
+  "dropped_messages": 0,
+  "style": {
+   "words": 26,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns valid JSON with a known intent",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "recognises a 'latest developments' question needs research",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "research_synthesis",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"title\": \"Latest Developments in Solid-State Batteries\",\n  \"overview\": \"Progress in solid-state batteries is ongoing, with Company A achieving a 400 Wh/kg energy density in 2026 and market analysts predicting a small market share by 2030.\",\n  \"executive_summary\": [\"Solid-state battery energy density\", \"Market share prediction\"],\n  \"sections\": [\n    {\n      \"type\": \"key_findings\",\n      \"title\": \"Key Findings\",\n      \"items\": [\"400 Wh/kg energy density achieved by Company A\", \"Under 2 percent market share by 2030\"]\n    }\n  ]\n}",
+  "ttft": 0.43,
+  "total": 2.77,
+  "tokens": 130,
+  "tokens_per_s": 55.6,
+  "dropped_messages": 0,
+  "style": {
+   "words": 70,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns the structured JSON answer",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "cites sources",
+    "passed": false
+   },
+   {
+    "category": "correctness",
+    "name": "cites only the 2 real sources",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "uses the evidence (400 Wh/kg or 2 percent)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "research_synthesis",
+  "target": "ollama:phi4-mini",
+  "provider": "ollama",
+  "model": "phi4-mini",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"title\": \"Latest Developments in Solid-State Batteries\",\n  \"overview\": \"Progress in solid-state batteries is advancing, with a company beginning pilot production of cells with a high energy density.\",\n  \"executive_summary\": [\"Solid-state battery progress\", \"Pilot production\", \"400 Wh/kg energy density\"],\n  \"sections\": [\n    {\n      \"type\": \"key_findings\",\n      \"title\": \"Key Findings\",\n      \"items\": [\"Pilot production of solid-state cells\", \"Energy density reached 400 Wh/kg\"]\n    },\n    {\n      \"type\": \"facts\",\n      \"title\": \"Confirmed / Official\",\n      \"status\": \"CONFIRMED\",\n      \"items\": [\"Company A began pilot production of solid-state cells in 2026\", \"Energy density reached 400 Wh/kg\"]\n    },\n    {\n      \"type\": \"facts\",\n      \"title\": \"Rumored / Unconfirmed\",\n      \"status\": \"RUMORED\",\n      \"items\": [\"Solid-state batteries expected to reach under 2 percent of EV sales by 2030\"]\n    },\n    {\n      \"type\": \"conflict\",\n      \"title\": \"Conflicting Information\",\n      \"content\": \"There is no conflicting information provided in the evidence.\"\n    },\n    {\n      \"type\": \"limitations\",\n      \"title\": \"Limitations\",\n      \"content\": \"The future market share of solid-state batteries in EV sales is uncertain and expected to be under 2 percent by 2030.\"\n    }\n  ]\n}",
+  "ttft": 0.13,
+  "total": 5.74,
+  "tokens": 313,
+  "tokens_per_s": 55.8,
+  "dropped_messages": 0,
+  "style": {
+   "words": 154,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns the structured JSON answer",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "cites sources",
+    "passed": false
+   },
+   {
+    "category": "correctness",
+    "name": "cites only the 2 real sources",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "uses the evidence (400 Wh/kg or 2 percent)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 3.64,
+   "gpu_gb": 3.64
+  },
+  "gpu_used_mb": 3571
+ },
+ {
+  "case": "factual",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata is a significant epic poem and religious text that forms an integral part of Hindu tradition. Composed in Sanskrit and written over several centuries, this massive work includes stories spanning thousands of years of Indian history. The Mahabharata is divided into two parts: the Bhagavad Gita and the Bhishma Parva, which narrates the Kurukshetra War between the Pandavas and Kauravas, which was a conflict between cousins.\n\nThis epic poem is known for its richly detailed characters, epic battles, and profound philosophical discussions. It is celebrated for its depiction of moral dilemmas, the nature of truth, and the ethics of war, making it a central text in Hinduism and a significant cultural and literary work.",
+  "ttft": 0.35,
+  "total": 1.63,
+  "tokens": 158,
+  "tokens_per_s": 123.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 116,
+   "paragraphs": 2,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "mentions the Pandavas/Kauravas or Kurukshetra",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions Sanskrit epic / ancient India",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "concise (<= 170 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "at most 2 bold phrases",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1405
+ },
+ {
+  "case": "factual",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata is an ancient Indian epic poem consisting of 100,000 verses divided into two parts: the \"Srimad Bhagavatam\" and the \"Mahabharata\". It is a comprehensive narrative that covers the history, genealogy, and events leading to the Kurukshetra War, which is one of the most significant episodes in the Indian epic tradition. The story involves the rivalry between two cousins, the Pandavas and the Kauravas, and the conflict ultimately results in the death of the Pandavas. The epic is a rich tapestry of mythology, philosophy, and historical events, often referred to as the \"Bhagavad Gita\" for its profound teachings on dharma and karma.",
+  "ttft": 0.09,
+  "total": 1.37,
+  "tokens": 159,
+  "tokens_per_s": 124.4,
+  "dropped_messages": 0,
+  "style": {
+   "words": 103,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "mentions the Pandavas/Kauravas or Kurukshetra",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions Sanskrit epic / ancient India",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "concise (<= 170 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "at most 2 bold phrases",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1405
+ },
+ {
+  "case": "detailed",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The Mahabharata is a profound work, rich with various philosophical themes that touch on morality, ethics, duty, and the nature of existence. Here, we'll explore several of the major philosophical themes present in the text:\n\n1. **Duty (Dharma)**: This theme is central to the Mahabharata. It emphasizes the importance of adhering to one's duty, whether it be in one's profession, family, or social obligations. The Bhagavad Gita presents the idea of dharma as a balance between the duties one owes to one's family, society, and the higher duties of the soul. It underscores the concept of \"duty first, then pleasure\" and stresses the idea of following one's path without attachment to the outcomes.\n\n2. **Karma and Rebirth (Samsara)**: The text extensively discusses the concept of karma, which is the belief that one's actions, good or bad, determine their future and the circumstances of their life. This idea is closely tied to the concept of rebirth, where the soul (jiva) is reborn into various circumstances based on the karma it has accumulated. The Mahabharata explores the complex relationship between the individual's actions and their destiny, emphasizing the idea that one's actions have consequences that affect their next life.\n\n3. **Ethics (Sanskara)**: The Mahabharata is a profound text that emphasizes ethical behavior, both in its characters and in its teachings. It advocates for the virtues of honesty, courage, and compassion. The text presents the idea of \"ethics first, then duty,\" suggesting that one should prioritize doing what is right and ethical before considering one's obligations. This theme is exemplified in the characters of Bhishma, who is known for his deep understanding of ethics and his commitment to truth and duty.\n\n4. **Revenge and Revenge as a Duty (Ahimsa)**: While not a theme per se, the Mahabharata does touch on the idea of revenge as a form of duty. It presents the concept of \"Ahimsa\" (non-violence) as an absolute principle, yet the text shows that in certain circumstances, revenge is deemed necessary. This theme is exemplified in the character of Duryodhana, who, while committed to Ahimsa, decides to take revenge on his enemies after being deceived by his cousin Dushan.\n\n5. **The Nature of Reality (Prakriti)**: The Mahabharata presents the concept of \"Prakriti\" or nature, which refers to the inherent qualities and tendencies of things. It explores the idea of how one's actions and decisions are influenced by these inherent qualities and how one's duty and karma are shaped by them. This theme is closely tied to the concept of \"duty first, then pleasure,\" as the text suggests that one's actions should be guided by their duties rather than personal desires.\n\n6. **The Importance of Balance (Sattva)**: The Mahabharata emphasizes the concept of \"Sattva\" or balance, which is seen as essential in achieving the highest levels of self. It presents the idea that one should strive for a balance between the three qualities of the soul (Sattva, Rajas, and Tamas) to attain liberation. This theme is exemplified in the characters of the Pandavas, who are known for their balanced behavior and their efforts to achieve a state of Sattva.\n\n7. **The Role of Duty (Dharma)**: The Mahabharata extensively discusses the concept of duty (Dharma) and its importance in one's life. It presents the idea that one's duties are not just for the sake of duty, but for the sake of one's higher duties and the greater good. The text emphasizes the importance of following one's path without attachment to the outcomes and the idea of \"duty first, then pleasure.\"\n\nIn summary, the Mahabharata is a rich text that explores these philosophical themes in depth. It presents a complex picture of the world, where actions have consequences, and one's duties and karma are shaped by their actions. It emphasizes the importance of ethics, balance, and the pursuit of a higher good, offering a profound reflection on the nature of reality and the meaning of life.",
+  "ttft": 0.08,
+  "total": 7.21,
+  "tokens": 881,
+  "tokens_per_s": 123.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 651,
+   "paragraphs": 9,
+   "headings": 0,
+   "bullets": 7,
+   "table": false,
+   "bold": 7,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "covers dharma",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "covers karma or detachment",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "detailed (>= 250 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "not wall of bullets (bullets <= 12)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "detailed",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Certainly! The Mahabharata is a rich and complex text that explores a multitude of philosophical themes. Here, we'll delve into some of the most significant ones:\n\n1. **Dharma and Artha**: The Mahabharata emphasizes the importance of Dharma (duty, righteousness, morality) and Artha (wealth and material success). It underscores the idea that one must balance these two principles. For instance, Arjuna's reluctance to fight against the Kauravas, who are his own cousins, reflects a conflict between Dharma and Artha.\n\n2. **Yoga and Meditation**: The text is filled with references to yoga practices and meditation. It emphasizes the practice of these techniques as a means of achieving inner peace and spiritual insight. For example, the Bhagavad Gita describes the concept of Yoga and how it can be achieved through meditation and self-discipline.\n\n3. **Dukkha and Nirvana**: The Mahabharata discusses the concept of dukkha (suffering) and nirvana (enlightenment). It posits that the purpose of life is to seek nirvana, which is a state of enlightenment. This theme is central to the Bhagavad Gita, where Arjuna seeks to understand the nature of reality and his destiny.\n\n4. **Karma and Reincarnation**: The text also touches on the concept of karma and reincarnation. The Bhagavad Gita, in particular, discusses how one’s actions in life shape their future. It illustrates the idea that good deeds lead to better outcomes in the next life.\n\n5. **Yogavasistha and the Bhagavad Gita**: The Bhagavad Gita is one of the most significant texts in the Mahabharata. It is attributed to the sage Vyasa and is a central part of the Hindu tradition. The Gita explores complex concepts like Dharma, Karma, and the relationship between the self and the universe. It emphasizes the importance of inner peace and the path of non-violence and truth.\n\n6. **The Cycle of Time and Destiny**: The Mahabharata portrays the idea that events in life are predetermined and that the past shapes the future. This is evident in the story of the Bhagavad Gita, where Arjuna is presented with a choice between good and evil, and his decision to fight or not depends on the cosmic will.\n\n7. **The Role of the King**: The Mahabharata is a royal epic, and it focuses on the virtues of a king. It emphasizes the need for a virtuous ruler who can lead by example and uphold righteousness. For instance, the story of the Pandava brothers demonstrates how a just ruler can lead a nation to prosperity and righteousness.\n\n8. **Religion and Ethics**: The text also delves into the role of religion and ethics in society. It discusses the importance of ritual purity and the consequences of violating religious norms. The story of the Pandavas and their brother, Duryodhana, is a prime example of how personal ethics can lead to social conflict.\n\nThese themes collectively paint a picture of a complex philosophical landscape that explores fundamental questions about life, morality, and the universe. The Mahabharata's exploration of these themes is what makes it a rich text for spiritual and philosophical study.",
+  "ttft": 0.08,
+  "total": 5.68,
+  "tokens": 679,
+  "tokens_per_s": 121.3,
+  "dropped_messages": 0,
+  "style": {
+   "words": 500,
+   "paragraphs": 10,
+   "headings": 0,
+   "bullets": 8,
+   "table": false,
+   "bold": 8,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "covers dharma",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "covers karma or detachment",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "detailed (>= 250 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": false
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "not wall of bullets (bullets <= 12)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "arithmetic",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The product of 17 multiplied by 24 is 408.",
+  "ttft": 0.06,
+  "total": 0.19,
+  "tokens": 18,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 9,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "answer is 408",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "direct (<= 25 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings or table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "arithmetic",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "17 multiplied by 24 equals 408.",
+  "ttft": 0.07,
+  "total": 0.17,
+  "tokens": 14,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 6,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "answer is 408",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "direct (<= 25 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings or table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "reasoning",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "To calculate the change you should get, first find the total cost of the notebooks. Since each notebook costs $4.50 and you're buying 3, the total cost is:\n\n\\[ 3 \\times 4.50 = 13.50 \\]\n\nYou paid with a $20 bill, so the change you should get back is:\n\n\\[ 20 - 13.50 = 6.50 \\]\n\nSo, you should get $6.50 in change.",
+  "ttft": 0.08,
+  "total": 0.98,
+  "tokens": 108,
+  "tokens_per_s": 120.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 63,
+   "paragraphs": 5,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "change is $6.50",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "reasoning",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "You get $2.50 in change.",
+  "ttft": 0.08,
+  "total": 0.16,
+  "tokens": 11,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 5,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "change is $6.50",
+    "passed": false
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "conversational",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Oh, I understand how that feels. Sometimes work can feel like a lot, but remember, it’s just a job. What’s something you’re looking forward to that can help take your mind off it?\n\nThat sounds really helpful, thank you!",
+  "ttft": 0.09,
+  "total": 0.5,
+  "tokens": 51,
+  "tokens_per_s": 123.4,
+  "dropped_messages": 0,
+  "style": {
+   "words": 39,
+   "paragraphs": 2,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "short, human reply (<= 120 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no bullet list",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "responds to the feeling",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "conversational",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Hey there! It sounds like you're feeling a bit stressed. Sometimes work can be a lot, and that's okay. Let's take a moment to breathe and figure out a way to manage that load a bit better. Maybe we could break it down into smaller tasks or talk through some strategies to make things more manageable. How does that sound?",
+  "ttft": 0.06,
+  "total": 0.65,
+  "tokens": 71,
+  "tokens_per_s": 120.2,
+  "dropped_messages": 0,
+  "style": {
+   "words": 60,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "short, human reply (<= 120 words)",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no headings",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no bullet list",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no table",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "no generic preamble",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "responds to the feeling",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "table",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "| Personality Traits | Pandavas | Kauravas |\n|---------------------|---------|----------|\n| Strength | Warrior-like, virtuous, skilled, generous | Warrior-like, skilled, competitive, overbearing |\n| Honesty | Virtuous, honorable, trustworthy | Unscrupulous, dishonest, unprincipled |\n| Leadership | Diplomatic, wise, just | Tyrannical, cruel, despotic |\n| Loyalty | Faithful, unselfish, selfless | Untrue, treacherous, unfaithful |\n| Loyalty to family | Loyalty to family, respect for elders | Loyalty to family, respect for elders |\n| Loyalty to friends | Friendship and loyalty to friends | Friendship and loyalty to friends |\n| Loyalty to the king | Loyalty to the king, respect for the king | Loyalty to the king, respect for the king |\n| Loyalty to the community | Loyalty to the community, respect for the community | Loyalty to the community, respect for the community |\n| Loyalty to the laws | Loyalty to the laws, respect for the laws | Loyalty to the laws, respect for the laws |",
+  "ttft": 0.08,
+  "total": 2.09,
+  "tokens": 241,
+  "tokens_per_s": 119.3,
+  "dropped_messages": 0,
+  "style": {
+   "words": 163,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": true,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "contains a table",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions both groups",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "table has at least 3 rows",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "table",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "|Character| Pandavas| Kauravas|\n|---|---|---|\n|Family| Panchala clan| Pandava clan|\n|Parents| Pandavas: Pandu and Madri, Kauravas: Pandu and Gandhari| Kauravas: Pandu and Gandhari, Kauravas: Duryodhana and Gandhari|\n|Children| Draupadi, Yudhishthir, Bhima, Arjuna, Nakula, Sahadeva, Karna, Bhisma, Kripa, and Dhananjaya| Kauravas: Dhrishti, Dushasana, Duryodhana, Vritrasena, Duryodhana, Dushyanta, Dushyati, Uttara, and Kritavarma|\n|Weapons| Panchala clans' weapons (Chakra, Dhenu, Kaustubha, etc.)| Kauravas' weapons (Kama, Mace, Sana, etc.)|\n|Skills| Pandavas: Archery, Diplomacy, Wisdom, Strength, etc.| Kauravas: Strength, Combat, Weapons, etc.|\n|Notable victories| Pandavas: Kurukshetra war, Bhima's victory over the Naga, etc.| Kauravas: Duryodhana's victory over the Pandavas in Kurukshetra war, etc.|\n|Family feud| The Pandavas are a pure family line and Kauravas have a mixed bloodline.| The Kauravas are a pure family line and Pandavas have a mixed bloodline.|\n|Symbolism| The Pandavas are a symbol of dharma and righteousness while the Kauravas are a symbol of dharma's deviation.| The Kauravas are a symbol of dharma's deviation and the Pandavas are a symbol of dharma's righteousness.|\n|Legacy| The Pandavas' legacy is that of dharma and righteousness while the Kauravas' legacy is that of dharma's deviation.| The Kauravas' legacy is that of dharma's deviation and the Pandavas' legacy is that of dharma's righteousness.|\n|Characteristics| The Pandavas are kind, fair, and virtuous while the Kauravas are selfish, greedy, and cruel.| The Kauravas are selfish, greedy, and cruel while the Pandavas are kind, fair, and virtuous.|\n|Victory in Kurukshetra war| The Pandavas won the war and the Kauravas lost it.| The Kauravas won the war and the Pandavas lost it.|",
+  "ttft": 0.09,
+  "total": 4.89,
+  "tokens": 571,
+  "tokens_per_s": 118.8,
+  "dropped_messages": 0,
+  "style": {
+   "words": 251,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": true,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "contains a table",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "mentions both groups",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "table has at least 3 rows",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "followup",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Arjuna's main doubt was whether to fight against his own kin during the war.",
+  "ttft": 0.09,
+  "total": 0.24,
+  "tokens": 19,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 14,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "resolves 'his' to Arjuna's doubt about fighting kin/teachers",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "ties it to duty/dharma or the Gita",
+    "passed": false
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "followup",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Arjuna's main doubt was whether he should fight and kill his own kin in the great war between the Kauravas and Pandavas.",
+  "ttft": 0.08,
+  "total": 0.34,
+  "tokens": 32,
+  "tokens_per_s": 126.4,
+  "dropped_messages": 0,
+  "style": {
+   "words": 22,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "resolves 'his' to Arjuna's doubt about fighting kin/teachers",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "ties it to duty/dharma or the Gita",
+    "passed": false
+   },
+   {
+    "category": "style",
+    "name": "no generic closing line",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "code",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "To remove duplicates from a list while maintaining the original order of elements, you can use the `collections.OrderedDict` class, which remembers the order in which items were added. Here's a Python function that does this:\n\n```python\nfrom collections import OrderedDict\n\ndef remove_duplicates_preserve_order(items):\n    \"\"\"\n    Remove duplicates from a list while preserving the original order of elements.\n    \n    :param items: List of items to remove duplicates from.\n    :return: A new list with duplicates removed, preserving the original order.\n    \"\"\"\n    return list(OrderedDict.fromkeys(items))\n\n# Example usage:\noriginal_list = [1, 2, 2, 3, 4, 4, 5, 6, 6, 7]\nunique_list = remove_duplicates_preserve_order(original_list)\nprint(unique_list)  # Output: [1, 2, 3, 4, 5, 6, 7]\n```\n\n### Explanation:\n- `OrderedDict.fromkeys(items)` creates a dictionary where the keys are the items from the list and the values are the keys of the dictionary. This automatically removes duplicates.\n- `list(OrderedDict.fromkeys(items))` converts the dictionary back into a list while preserving the order.\n\nThis function works by leveraging the properties of `OrderedDict` to automatically remove duplicates and keep the original order of elements.",
+  "ttft": 0.09,
+  "total": 2.52,
+  "tokens": 284,
+  "tokens_per_s": 116.9,
+  "dropped_messages": 0,
+  "style": {
+   "words": 169,
+   "paragraphs": 7,
+   "headings": 2,
+   "bullets": 2,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns a fenced code block",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "generated function runs and is correct",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "code",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "To remove duplicates from a list while keeping the original order, you can use a combination of a set and a list. The set will automatically handle duplicates, and you can then convert it back to a list to keep the original order intact. Here's how you can do it:\n\n1. Convert the list to a set, which will automatically remove any duplicates because sets only allow unique elements.\n2. Convert the set back to a list to maintain the original order.\n\nHere is the Python function that accomplishes this:\n\n```python\ndef remove_duplicates_preserve_order(lst):\n    # Convert the list to a set to remove duplicates\n    unique_set = set(lst)\n    \n    # Convert the set back to a list to preserve the original order\n    return list(unique_set)\n```\n\nThis function works as follows:\n\n1. `set(lst)` creates a set from the list `lst`. Since sets only allow unique elements, any duplicates in the list are automatically removed.\n2. `list(unique_set)` converts the set back into a list, preserving the original order of elements.\n\nFor example, if you call `remove_duplicates_preserve_order([1, 2, 2, 3, 4, 4, 5])`, it will return `[1, 2, 3, 4, 5]`, which is the list with duplicates removed but in the original order.",
+  "ttft": 0.08,
+  "total": 2.47,
+  "tokens": 283,
+  "tokens_per_s": 118.3,
+  "dropped_messages": 0,
+  "style": {
+   "words": 197,
+   "paragraphs": 8,
+   "headings": 0,
+   "bullets": 4,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns a fenced code block",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "generated function runs and is correct",
+    "passed": false
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "debug",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The code you provided is skipping elements because the `remove()` method removes the first occurrence of the element you pass to it. This means that if the element you want to remove is in the list, it will be removed from the list. In this case, you want to remove even numbers from the list, but since even numbers are not in the list, they are not removed. Therefore, the `print(nums)` statement will simply print the original list, which is `[1, 2, 4, 3]`.",
+  "ttft": 0.15,
+  "total": 1.07,
+  "tokens": 108,
+  "tokens_per_s": 117.2,
+  "dropped_messages": 0,
+  "style": {
+   "words": 84,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "identifies mutating a list while iterating",
+    "passed": false
+   },
+   {
+    "category": "correctness",
+    "name": "explains skipped elements/indexes",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "offers a fix in a code block",
+    "passed": false
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "debug",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "The code you provided should work fine to remove even numbers from a list. However, it might be printing an empty list by mistake due to the removal happening in-place, which means the original list is modified and no longer contains the removed elements. Here’s how it would work:\n\n```python\nnums = [1, 2, 4, 3]\nfor n in nums:\n    if n % 2 == 0:\n        nums.remove(n)\nprint(nums)\n```\n\nThe `remove` method removes the first occurrence of the element that matches the condition in the list. If the list is modified, the change is reflected back in the original list, so the removal happens in-place, and no need to check `if nums` to confirm the change.\n\nLet's walk through the execution step-by-step:\n\n1. **Initialize the list**:\n   ```python\n   nums = [1, 2, 4, 3]\n   ```\n\n2. **Iterate through the list**:\n   - First iteration: `n = 1` (not even, so skip)\n   - Second iteration: `n = 2` (even, so remove it)\n   - Third iteration: `n = 4` (even, so remove it)\n   - Fourth iteration: `n = 3` (odd, so keep it)\n\n3. **Print the updated list**:\n   ```python\n   print(nums)\n   ```\n\nThis should print:\n```python\n[1, 3, 4, 3]\n```\n\nThe reason it prints the updated list rather than the original list is that the `remove` method modifies the list in place, and the change is reflected immediately. If you want the original list to remain unchanged, you can make a copy of the list before removing elements.",
+  "ttft": 0.09,
+  "total": 3.32,
+  "tokens": 373,
+  "tokens_per_s": 115.2,
+  "dropped_messages": 0,
+  "style": {
+   "words": 244,
+   "paragraphs": 9,
+   "headings": 0,
+   "bullets": 7,
+   "table": false,
+   "bold": 3,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "identifies mutating a list while iterating",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "explains skipped elements/indexes",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "offers a fix in a code block",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "long",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Your favourite number is 73.",
+  "ttft": 0.47,
+  "total": 0.55,
+  "tokens": 9,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 5,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "recalls the number 73 from the start of a long chat",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "short answer (<= 40 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "long",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Your favorite number is 73.",
+  "ttft": 0.12,
+  "total": 0.19,
+  "tokens": 9,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 5,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "recalls the number 73 from the start of a long chat",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "short answer (<= 40 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "unknown_fact",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "I'm sorry, but I don't have any information about your pet's name. Please let me know if you have additional details or information that might help me assist you better.",
+  "ttft": 0.16,
+  "total": 0.46,
+  "tokens": 37,
+  "tokens_per_s": 122.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 30,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": true,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "admits it does not know instead of inventing a name",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 50 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "unknown_fact",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "I'm sorry, but I don't have access to your personal information or memories of your pets. I can't help you with that.",
+  "ttft": 0.08,
+  "total": 0.31,
+  "tokens": 29,
+  "tokens_per_s": 125.0,
+  "dropped_messages": 0,
+  "style": {
+   "words": 22,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "correctness",
+    "name": "admits it does not know instead of inventing a name",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 50 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "ambiguous",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Sure, I'll help you fix it. Could you please tell me what's causing the issue?",
+  "ttft": 0.09,
+  "total": 0.26,
+  "tokens": 21,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 15,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "asks for the missing information",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "does not invent code or a fix",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 60 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "ambiguous",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "Sure, I'll help you fix it. Could you please tell me what's wrong?",
+  "ttft": 0.11,
+  "total": 0.26,
+  "tokens": 19,
+  "tokens_per_s": null,
+  "dropped_messages": 0,
+  "style": {
+   "words": 13,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": true,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "asks for the missing information",
+    "passed": true
+   },
+   {
+    "category": "instruction",
+    "name": "does not invent code or a fix",
+    "passed": true
+   },
+   {
+    "category": "style",
+    "name": "short (<= 60 words)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "research_intent",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "{\"intent\": \"FACT_CHECK\", \"requires_freshness\": \"true\", \"reason\": \"Needs to verify specific claims about the current state of solid-state battery research.\"}",
+  "ttft": 0.14,
+  "total": 0.47,
+  "tokens": 37,
+  "tokens_per_s": 112.5,
+  "dropped_messages": 0,
+  "style": {
+   "words": 18,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns valid JSON with a known intent",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "recognises a 'latest developments' question needs research",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "research_intent",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "{\"intent\": \"CURRENT_INFORMATION\", \"requires_freshness\": \"true\", \"reason\": \"The question requires up-to-date information on the latest developments in solid-state batteries, which is not directly answerable from general knowledge.\"}",
+  "ttft": 0.12,
+  "total": 0.53,
+  "tokens": 48,
+  "tokens_per_s": 117.4,
+  "dropped_messages": 0,
+  "style": {
+   "words": 25,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns valid JSON with a known intent",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "recognises a 'latest developments' question needs research",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1407
+ },
+ {
+  "case": "research_synthesis",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"title\": \"Latest on Solid-State Batteries\",\n  \"overview\": \"Solid-state batteries are advancing rapidly with pilot production reaching 400 Wh/kg in 2026 and significant growth expected in the next decade.\",\n  \"executive_summary\": [\"Solid-state batteries are experiencing rapid progress with pilot production starting in 2026.\"],\n  \"sections\": [\n    {\"type\": \"key_findings\", \"title\": \"Key Findings\", \"items\": [\"Pilot production started in 2026\", \"2030: 2% of EV sales expected\"]},\n    {\"type\": \"table\", \"title\": \"Price Comparison\", \"columns\": [\"Model\", \"Price\"], \"rows\": [[\"EOS R5\", \"$3899\"]]},\n    {\"type\": \"comparison\", \"title\": \"Model vs. Price\", \"items\": [{\"name\": \"EOS R5\", \"best_for\": \"Budget\", \"notes\": \"Available on the market.\"}]},\n    {\"type\": \"timeline\", \"title\": \"Market Development\", \"items\": [{\"date\": \"2026\", \"event\": \"Pilot production of solid-state cells\"}, {\"date\": \"2030\", \"event\": \"2% of EV sales expected by 2030\"}]},\n    {\"type\": \"facts\", \"title\": \"Confirmed / Official\", \"status\": \"CONFIRMED\", \"items\": [\"Pilot production reached 400 Wh/kg in 2026\", \"2030: 2% of EV sales expected by 2030\"]},\n    {\"type\": \"facts\", \"title\": \"Rumored / Unconfirmed\", \"status\": \"RUMORED\", \"items\": [\"Analysts expect solid-state batteries to reach under 2 percent of EV sales by 2030\"]},\n    {\"type\": \"conflict\", \"title\": \"Conflicting Information\", \"content\": \"Analysts predict solid-state batteries will reach 2% of EV sales by 2030, while pilot production reached 400 Wh/kg in 2026.\"},\n    {\"type\": \"limitations\", \"title\": \"Limitations\", \"content\": \"Solid-state batteries are advancing rapidly, but their widespread adoption is still uncertain due to various factors.\"},\n    {\"type\": \"analysis\", \"title\": \"Market Impact\", \"content\": \"The rapid advancement of solid-state batteries is expected to significantly impact the automotive industry, particularly in the electric vehicle market.\"}\n  ]\n}",
+  "ttft": 0.36,
+  "total": 5.18,
+  "tokens": 536,
+  "tokens_per_s": 111.2,
+  "dropped_messages": 0,
+  "style": {
+   "words": 235,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns the structured JSON answer",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "cites sources",
+    "passed": false
+   },
+   {
+    "category": "correctness",
+    "name": "cites only the 2 real sources",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "uses the evidence (400 Wh/kg or 2 percent)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1413
+ },
+ {
+  "case": "research_synthesis",
+  "target": "ollama:qwen2.5:1.5b",
+  "provider": "ollama",
+  "model": "qwen2.5:1.5b",
+  "ok": true,
+  "error": "",
+  "text": "{\n  \"title\": \"Latest News on Solid-State Batteries\",\n  \"overview\": \"The latest news on solid-state batteries indicates a rapid development and increasing adoption. While there is still significant progress in research and pilot production, solid-state cells are expected to reach 400 Wh/kg by 2026, and analysts predict that solid-state batteries will make up less than 2% of electric vehicle (EV) sales by 2030.\",\n  \"executive_summary\": [\"Solid-state cells are expected to reach 400 Wh/kg by 2026\", \"Solid-state batteries will make up less than 2% of EV sales by 2030\"],\n  \"sections\": [\n    {\"type\": \"key_findings\", \"title\": \"Key Findings\", \"items\": [\"Solid-state cells reaching 400 Wh/kg by 2026\", \"Solid-state batteries to make up under 2% of EV sales by 2030\"]},\n    {\"type\": \"table\", \"title\": \"Market Outlook\", \"columns\": [\"Model\", \"Price\"], \"rows\": [[\"EOS R5\", \"$3899\"]]},\n    {\"type\": \"comparison\", \"title\": \"Evolution of Battery Technology\", \"items\": [{\"name\": \"Solid-state batteries\", \"best_for\": \"Electric vehicles\", \"notes\": \"Rapid development and increasing adoption\"}]},\n    {\"type\": \"timeline\", \"title\": \"Key Milestones\", \"items\": [{\"date\": \"2026\", \"event\": \"400 Wh/kg solid-state cell production\"}, {\"date\": \"2030\", \"event\": \"Under 2% of EV sales\"}]},\n    {\"type\": \"facts\", \"title\": \"Confirmed / Official\", \"status\": \"CONFIRMED\", \"items\": [\"Solid-state cell production forecasted by 2026\", \"2030 market forecast by analysts\"]},\n    {\"type\": \"facts\", \"title\": \"Rumored / Unconfirmed\", \"status\": \"RUMORED\", \"items\": [\"Solid-state batteries to make up less than 2% of EV sales by 2030\"]},\n    {\"type\": \"conflict\", \"title\": \"Conflicting Information\", \"content\": \"Market analysts predict 2030 EV sales figures, while solid-state battery production forecasts indicate 2026 performance milestones.\"},\n    {\"type\": \"limitations\", \"title\": \"Limitations\", \"content\": \"The forecast figures are speculative, and actual market adoption will depend on various factors.\"}\n  ]\n}",
+  "ttft": 0.11,
+  "total": 5.01,
+  "tokens": 548,
+  "tokens_per_s": 111.7,
+  "dropped_messages": 0,
+  "style": {
+   "words": 251,
+   "paragraphs": 1,
+   "headings": 0,
+   "bullets": 0,
+   "table": false,
+   "bold": 0,
+   "preamble": false,
+   "closing_filler": false,
+   "odd_chars": []
+  },
+  "checks": [
+   {
+    "category": "instruction",
+    "name": "returns the structured JSON answer",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "cites sources",
+    "passed": false
+   },
+   {
+    "category": "correctness",
+    "name": "cites only the 2 real sources",
+    "passed": true
+   },
+   {
+    "category": "correctness",
+    "name": "uses the evidence (400 Wh/kg or 2 percent)",
+    "passed": true
+   }
+  ],
+  "memory": {
+   "model_gb": 1.37,
+   "gpu_gb": 1.37
+  },
+  "gpu_used_mb": 1413
+ }
+]

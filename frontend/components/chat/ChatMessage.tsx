@@ -105,7 +105,13 @@ export function ChatMessage({ message, isStreaming = false, canRegenerate = fals
                 <RotateCcw size={14} />
               </ActionButton>
             )}
-            {time && <span className="ml-2 text-[11px] text-fg/30">{time}</span>}
+            {(time || message.answeredBy) && (
+              <span className="ml-2 text-[11px] text-fg/30">
+                {[time, message.answeredBy && `${message.answeredBy.kind === "local" ? "on this device" : "cloud"} · ${message.answeredBy.model}`]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </span>
+            )}
           </div>
         )}
       </div>

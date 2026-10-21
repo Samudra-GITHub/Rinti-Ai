@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { AlertCircle, ArrowDown, RotateCcw, X } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
@@ -61,7 +62,7 @@ export function ChatWindow({
   const [draft, setDraft] = useState(initialDraft);
   const [isStreaming, setIsStreaming] = useState(false);
   const [hasStreamedContent, setHasStreamedContent] = useState(false);
-  const [error, setError] = useState<{ message: string; retryable: boolean } | null>(
+  const [error, setError] = useState<{ message: string; retryable: boolean; settings?: boolean } | null>(
     loadError ? { message: loadError, retryable: false } : null
   );
   const [pinnedToBottom, setPinnedToBottom] = useState(true);
@@ -217,6 +218,7 @@ export function ChatWindow({
     let assistantStarted = false;
     let receivedStructuredAnswer = false;
     let receivedError = false;
+    let answeredBy: Message["answeredBy"];
     const wasNewConversation = !activeConversationIdRef.current;
     // Whether the backend has stored this user turn. If not (offline, rate
     // limit, validation), the text goes back into the composer instead.
@@ -225,8 +227,8 @@ export function ChatWindow({
     const controller = new AbortController();
     abortRef.current = controller;
 
-    function failBeforePersist(message: string) {
-      setError({ message, retryable: false });
+    function failBeforePersist(message: string, settings = false) {
+      setError({ message, retryable: false, settings });
       if (!regenerate) {
         setMessages((prev) => prev.filter((m) => m.id !== optimisticUser.id));
         setDraft((current) => current || text);
@@ -285,7 +287,9 @@ export function ChatWindow({
           detail ??
             (res.status >= 500
               ? "Something went wrong on our side. Your message is still in the box. Try sending it again."
-              : "Rinti couldn't process that request. Please try again.")
+              : "Rinti couldn't process that request. Please try again."),
+          // 403/404/503 from the router mean the model setup needs attention.
+          [403, 404, 503].includes(res.status)
         );
         return;
       }
@@ -310,6 +314,9 @@ export function ChatWindow({
             conversationId?: string;
             message?: string;
             code?: string;
+            provider?: string;
+            model?: string;
+            kind?: "local" | "cloud";
             stage?: ResearchStage;
             label?: string;
             notes?: string[];
@@ -325,7 +332,12 @@ export function ChatWindow({
             continue;
           }
 
-          if (evt.event === "research_status") {
+          if (evt.event === "meta") {
+            // Which model is answering (may change if the cloud fallback is used).
+            if (payload.provider && payload.model && payload.kind) {
+              answeredBy = { provider: payload.provider, model: payload.model, kind: payload.kind };
+            }
+          } else if (evt.event === "research_status") {
             if (payload.stage) setResearchStage(payload.stage);
             setResearchLabel(payload.label);
           } else if (evt.event === "source") {
@@ -356,7 +368,7 @@ export function ChatWindow({
               setHasStreamedContent(true);
               setMessages((prev) => [
                 ...prev,
-                { id: assistantId, role: "assistant", content: "", timestamp: new Date().toISOString() },
+                { id: assistantId, role: "assistant", content: "", timestamp: new Date().toISOString(), answeredBy },
               ]);
             }
             const delta = payload.delta;
@@ -370,8 +382,14 @@ export function ChatWindow({
           } else if (evt.event === "error") {
             receivedError = true;
             const message = payload.message ?? "Something went wrong. Please try again.";
-            if (persisted) {
+            // Problems with the model setup are fixed in Settings, not by retrying.
+            const setupProblem = ["provider_unavailable", "model_unavailable", "policy_violation", "provider_auth"].includes(
+              payload.code ?? ""
+            );
+            if (persisted && !setupProblem) {
               setError({ message, retryable: true });
+            } else if (persisted) {
+              setError({ message, retryable: true, settings: true });
             } else {
               failBeforePersist(message);
             }
@@ -558,6 +576,14 @@ export function ChatWindow({
                     <span className="min-w-0 break-words">{error.message}</span>
                   </span>
                   <span className="flex shrink-0 items-center gap-1">
+                    {error.settings && (
+                      <Link
+                        href="/settings"
+                        className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium hover:bg-red-500/15 focus-ring"
+                      >
+                        Open settings
+                      </Link>
+                    )}
                     {error.retryable && (
                       <button
                         type="button"

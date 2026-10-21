@@ -6,4 +6,6 @@ export interface Message {
   content: string;
   timestamp: string;
   researchSessionId?: string | null;
+  /** Which model answered (known for replies generated in this session). */
+  answeredBy?: { provider: string; model: string; kind: "local" | "cloud" };
 }

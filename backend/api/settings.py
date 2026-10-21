@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from typing import Optional, List
 import memory.database as db
 from auth.dependencies import get_current_user, verify_csrf_header
-from config import settings
 
 router = APIRouter()
 
@@ -73,11 +72,27 @@ async def get_voices_endpoint(current_user: dict = Depends(get_current_user)):
 
 @router.get("/models", response_model=List[ModelAvailability])
 async def get_models_endpoint(current_user: dict = Depends(get_current_user)):
-    # Reports availability only — never the key or base URL itself.
-    return [
-        {
-            "id": settings.model_name,
-            "provider": "openai-compatible",
-            "available": bool(settings.openai_api_key.strip()),
-        }
-    ]
+    """Models the user may pick. Every entry has been verified: local models come
+    from what Ollama reports as installed, the cloud model only appears when a
+    key is configured and the policy allows cloud use. Never exposes keys or URLs."""
+    from core.routing import load_config
+    from providers.registry import cloud_providers, providers
+
+    cfg = load_config()
+    models: List[dict] = []
+
+    if cfg.mode != "cloud":  # cloud mode never touches Ollama (it can't exist on a hosted backend)
+        local_health = providers()["ollama"].health()
+        if local_health.reachable:
+            models.extend({"id": m.id, "provider": "ollama", "available": True} for m in local_health.models)
+
+    cloud = cloud_providers().get(cfg.cloud_provider)
+    # Same rule as plan_route: the cloud is offered in Cloud mode, or in Auto only when its fallback is on.
+    cloud_allowed = cfg.mode == "cloud" or (cfg.mode == "auto" and cfg.cloud_fallback)
+    if cloud_allowed and cloud and cloud.is_configured():
+        models.append({"id": cfg.cloud_model, "provider": cloud.name, "available": True})
+
+    # "Auto" lets the router choose (shown first and used by default).
+    if models:
+        models.insert(0, {"id": "auto", "provider": "router", "available": True})
+    return models

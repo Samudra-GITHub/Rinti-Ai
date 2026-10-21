@@ -52,6 +52,102 @@ export interface SettingsDto {
   voice_id: string;
 }
 
+export type InferenceMode = "local" | "auto" | "cloud";
+
+export type FitLevel = "gpu" | "partial" | "cpu" | "no";
+
+export interface FitDto {
+  level: FitLevel;
+  fits: boolean;
+  needed_gb: number;
+  context: number;
+  speed: string;
+  reasons: string[];
+}
+
+export interface LicenseDto {
+  id: string;
+  name: string;
+  commercial: "yes" | "no" | "review";
+  url?: string;
+  source?: string;
+}
+
+export interface LocalModelDto {
+  id: string;
+  size_gb: number | null;
+  fit: FitDto | null;
+  license: LicenseDto;
+  commercial_ok: boolean;
+  verified: boolean;
+}
+
+export interface RecommendationCandidateDto {
+  model: string;
+  label: string;
+  download_gb: number;
+  installed: boolean;
+  context: number;
+  fit: FitDto;
+  license: LicenseDto;
+  tested: string;
+  role: string;
+}
+
+export interface AlternativeDto {
+  action: "use_model" | "install_model" | "switch_mode";
+  text: string;
+  model?: string;
+  mode?: InferenceMode;
+}
+
+export interface InferenceStatusDto {
+  mode: InferenceMode;
+  local_model: string;
+  coding_model: string;
+  cloud_provider: string;
+  cloud_model: string;
+  cloud_escalation: boolean;
+  cloud_fallback: boolean;
+  defaults: { mode: InferenceMode; local_model: string };
+  /** null on a hosted backend, for clients that aren't allowed to configure it. */
+  hardware: {
+    os: string;
+    cpu_threads: number;
+    ram_total_gb: number;
+    ram_available_gb: number | null;
+    gpu: { name: string; vram_total_gb: number; vram_free_gb: number | null; source: string } | null;
+    notes: string[];
+  } | null;
+  deployment: { hosted: boolean; serverless: boolean; note: string };
+  recommendation: {
+    recommended: RecommendationCandidateDto | null;
+    candidates: RecommendationCandidateDto[];
+    summary: string;
+    commercial_only: boolean;
+  };
+  commercial_only: boolean;
+  assessment: { level: "good" | "slow" | "unsuitable" | "unavailable"; problems: string[]; notes: string[]; alternatives: AlternativeDto[] };
+  local: {
+    reachable: boolean;
+    detail: string;
+    installed: { id: string; size_gb: number | null; parameters: string | null; quantization: string | null }[];
+    models: LocalModelDto[];
+    loaded: { model: string | null; size_gb: number; gpu_gb: number; context: number | null }[];
+    general_ready: boolean;
+    coding_ready: boolean;
+  };
+  cloud: { id: string; label: string; configured: boolean }[];
+  can_configure: boolean;
+}
+
+export interface InferenceConfigUpdate {
+  mode?: InferenceMode;
+  local_model?: string;
+  coding_model?: string;
+  cloud_fallback?: boolean;
+}
+
 const MUTATING_METHODS = new Set(["POST", "PATCH", "DELETE", "PUT"]);
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -144,6 +240,13 @@ export const api = {
     request<{ status: string; id: string }>(`/api/memory/${id}`, { method: "DELETE" }),
 
   listModels: () => request<ModelAvailabilityDto[]>("/api/models"),
+
+  getInferenceStatus: () => request<InferenceStatusDto>("/api/inference/status"),
+  updateInferenceConfig: (update: InferenceConfigUpdate) =>
+    request<{ status: string; changed: string[] }>("/api/inference/config", {
+      method: "PATCH",
+      body: JSON.stringify(update),
+    }),
 
   getSettings: () => request<SettingsDto>("/api/settings"),
   updateSettings: (patch: Partial<SettingsDto>) =>

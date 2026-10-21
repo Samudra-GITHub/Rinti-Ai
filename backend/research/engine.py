@@ -170,24 +170,33 @@ class ResearchEngine:
         section level instead (run() emits one answer_section frame per
         parsed section right after this returns) — see R1.6B §12.
         """
-        from config import settings
-        from core.brain import client, clean_model_text
+        from core.brain import clean_model_text
+        from core.inference import complete_sync
         from core.personality import RINTI_SYSTEM_PROMPT
 
         evidence_text = build_evidence_blocks(sources, evidence, numbering)
         user_content = build_synthesis_prompt(question, evidence_text)
 
-        response = client.chat.completions.create(
-            model=settings.model_name,
+        # Runs in a worker thread (the provider call blocks) and goes through the
+        # same routing policy as chat, so strict local-only mode covers research too.
+        completion = await asyncio.to_thread(
+            complete_sync,
             # Canonical identity stays in the system slot; evidence is user-role data.
-            messages=[
+            [
                 {"role": "system", "content": RINTI_SYSTEM_PROMPT},
                 {"role": "user", "content": user_content},
             ],
+            purpose="research_synthesis",
             temperature=0.3,
             max_tokens=MAX_SYNTHESIS_TOKENS,
+            json_mode=True,
+            # Groq was never sent a JSON constraint for synthesis; keep that request
+            # exactly as it was (a rejected JSON-mode generation would be an error
+            # instead of the parser's graceful fallback). Local models get the constraint.
+            json_mode_cloud=False,
+            user_text=question,
         )
-        raw_text = clean_model_text(response.choices[0].message.content or "")
+        raw_text = clean_model_text(completion.text)
         answer, parse_notes = parse_structured_answer(raw_text, question)
         return answer, parse_notes
 

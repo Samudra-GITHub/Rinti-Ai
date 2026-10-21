@@ -1,16 +1,12 @@
 import json
 import time
-from typing import AsyncGenerator, List, Optional, cast
-from openai import AsyncOpenAI, OpenAI
-from openai.types.chat import ChatCompletionMessageParam
-from config import settings
-from core.personality import RINTI_SYSTEM_PROMPT
-import memory.database as db
+from typing import AsyncGenerator, List, Optional
 
-client = OpenAI(
-    api_key=settings.openai_api_key,
-    base_url=settings.openai_base_url if settings.openai_base_url else None
-)
+from core.inference import complete_sync, stream_chat
+from core.personality import RINTI_SYSTEM_PROMPT
+from core.routing import Route
+from providers.base import ProviderError
+import memory.database as db
 
 # Characters models sometimes emit in place of ordinary ones. Each maps to a
 # plain equivalent (or nothing), one character at a time, so the substitution is
@@ -59,16 +55,7 @@ def _record_user_turn(conversation_id: str, user_id: str, user_message: str, reg
     db.set_title_if_missing(conversation_id, user_id, _title_from(user_message))
 
 
-# The streaming path is async so that Starlette can cancel it the moment the
-# browser disconnects (Stop button, closed tab). A sync generator running in a
-# worker thread can't be interrupted, so its cleanup would never run.
-async_client = AsyncOpenAI(
-    api_key=settings.openai_api_key,
-    base_url=settings.openai_base_url if settings.openai_base_url else None
-)
-
-
-def _build_messages(conversation_id: str, user_id: str) -> List[ChatCompletionMessageParam]:
+def _build_messages(conversation_id: str, user_id: str) -> List[dict]:
     """Shared prompt assembly used by both the non-streaming and streaming paths."""
     system_prompt = RINTI_SYSTEM_PROMPT
     current_settings = db.get_settings()
@@ -93,49 +80,42 @@ def _build_messages(conversation_id: str, user_id: str) -> List[ChatCompletionMe
     # payload must only ever contain role/content, or the provider will reject it.
     messages_payload.extend({"role": h["role"], "content": h["content"]} for h in history)
 
-    # Cast to Iterable[ChatCompletionMessageParam] to satisfy static type checker
-    return cast(List[ChatCompletionMessageParam], messages_payload)
+    return messages_payload
 
 def generate_response(
     user_message: str, conversation_id: str, user_id: str, model: Optional[str] = None, regenerate: bool = False
 ) -> str:
-    # 1. Save user message to short-term history
+    """Non-streaming reply. Routing, limits and fallback are handled by core.inference."""
     _record_user_turn(conversation_id, user_id, user_message, regenerate)
-
-    # 2. Build system prompt + history (memories, settings, conversation context)
     messages = _build_messages(conversation_id, user_id)
-
-    # 3. Call LLM (falls back to the configured default model when none is provided)
-    response = client.chat.completions.create(
-        model=model or settings.model_name,
-        messages=messages,
-        temperature=0.7,
-        max_tokens=settings.max_response_tokens
+    completion = complete_sync(
+        messages, purpose="chat", requested_model=model, user_text=user_message
     )
+    reply = clean_model_text(completion.text)
+    db.save_message(conversation_id, "assistant", reply)
+    return reply
 
-    # 4. Guard against None response from content
-    rinti_reply: str = clean_model_text(response.choices[0].message.content or "")
 
-    # 5. Save assistant message
-    db.save_message(conversation_id, "assistant", rinti_reply)
+def _sse(event: str, data: dict) -> str:
+    return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
-    return rinti_reply
 
 async def stream_response(
-    user_message: str, conversation_id: str, user_id: str, model: Optional[str] = None, regenerate: bool = False
+    user_message: str, conversation_id: str, user_id: str, route: Route, regenerate: bool = False
 ) -> AsyncGenerator[str, None]:
-    """SSE generator: yields 'token' events as chunks arrive, then 'done', or 'error' on failure.
+    """SSE generator: a 'meta' event (which provider/model answers), 'token' events as text
+    arrives, then 'done', or 'error' on failure.
 
-    Persists the user message immediately (matching generate_response). The assistant
-    message is written as soon as its first text arrives and then kept up to date every
-    fraction of a second, so if the client stops the stream (or disconnects) the reply
-    that was already shown is also what is saved, whether or not this generator gets to
-    run its cleanup.
+    Persists the user message immediately. The assistant message is written as soon as its
+    first text arrives and then kept up to date every fraction of a second, so if the client
+    stops the stream (or disconnects) the reply that was already shown is also what is saved,
+    whether or not this generator gets to run its cleanup.
     """
     _record_user_turn(conversation_id, user_id, user_message, regenerate)
     reply_parts: List[str] = []
     assistant_message_id: Optional[str] = None
     last_flush = 0.0
+    answered_by: dict = {}
 
     def flush(force: bool = False) -> None:
         nonlocal assistant_message_id, last_flush
@@ -153,32 +133,30 @@ async def stream_response(
     try:
         messages = _build_messages(conversation_id, user_id)
 
-        stream = await async_client.chat.completions.create(
-            model=model or settings.model_name,
-            messages=messages,
-            temperature=0.7,
-            max_tokens=settings.max_response_tokens,
-            stream=True,
-        )
-
-        async for chunk in stream:
-            if not chunk.choices:
-                continue
-            delta = clean_model_text(chunk.choices[0].delta.content or "")
-            if delta:
-                reply_parts.append(delta)
-                flush()
-                yield f"event: token\ndata: {json.dumps({'delta': delta})}\n\n"
+        async for event in stream_chat(route, messages):
+            if event.kind == "meta":
+                answered_by = {k: event.usage[k] for k in ("provider", "model", "kind", "reason") if k in event.usage}
+                yield _sse("meta", event.usage)
+            elif event.kind == "text":
+                delta = clean_model_text(event.text)
+                if delta:
+                    reply_parts.append(delta)
+                    flush()
+                    yield _sse("token", {"delta": delta})
 
         flush(force=True)
-        yield f"event: done\ndata: {json.dumps({'conversationId': conversation_id})}\n\n"
+        yield _sse("done", {"conversationId": conversation_id, **answered_by})
 
-    except Exception as e:
-        # Server-side only, and never the exception's full string (some SDK auth-error
-        # messages echo a masked key fragment) — just the type, for debugging.
+    except ProviderError as e:
+        # The message is written to be shown to the user (no keys, URLs or traces).
+        print(f"[stream_response] provider error: {e.code}")
+        flush(force=True)
+        yield _sse("error", {"code": e.code, "message": e.user_message})
+    except Exception as e:  # noqa: BLE001
+        # Server-side only, and never the exception text (SDK errors can echo key fragments).
         print(f"[stream_response error] {type(e).__name__}")
         flush(force=True)
-        yield f"event: error\ndata: {json.dumps({'code': 'provider_error', 'message': 'Rinti is temporarily unavailable. Please try again.'})}\n\n"
+        yield _sse("error", {"code": "provider_error", "message": "Rinti is temporarily unavailable. Please try again."})
     finally:
         # Also covers the client closing the stream (GeneratorExit) when this runs.
         flush(force=True)
